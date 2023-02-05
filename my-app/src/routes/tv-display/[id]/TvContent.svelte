@@ -1,12 +1,20 @@
 <script>
 import { browser } from "$app/environment";
 import { onMount } from "svelte";
-
+import { broadcasts_played } from "../../../stores/stores.js";
 export let data;
 let current_broadcast = 0;
 let current_broadcast_duration = 0;
 /** @type {Array<{broadcast: number, play_time: Date}>} */
-let broadcasts_played = [];
+
+// export function broadcast_list_updated() {
+//   debugger;
+//   current_broadcast = 0;
+//   current_broadcast_duration = 0;
+//   console.log(current_broadcast, data["broadcasts"]);
+//   on_broadcast_changed(data["broadcasts"][current_broadcast]);
+//   console.log("broadcast_list_updated");
+// }
 let interval = setInterval(() => {
   if (data["broadcasts"] == undefined) return;
 
@@ -21,11 +29,19 @@ let interval = setInterval(() => {
         'data["broadcasts"][current_broadcast]: ',
         data["broadcasts"][current_broadcast]
       );
-      broadcasts_played.push({
-        broadcast: data["broadcasts"][current_broadcast].broadcast,
-        play_time: new Date(),
+      debugger;
+      broadcasts_played.update((n) => {
+        n.push({
+          broadcast: data["broadcasts"][current_broadcast].broadcast,
+          play_time: new Date(),
+        });
+        return n;
       });
-      broadcasts_played = [...broadcasts_played];
+      // $broadcasts_played.push({
+      //   broadcast: data["broadcasts"][current_broadcast].broadcast,
+      //   play_time: new Date(),
+      // });
+      // $broadcasts_played = [...$broadcasts_played];
       current_broadcast_duration = 0;
       current_broadcast = (current_broadcast + 1) % data["broadcasts"].length;
       on_broadcast_changed(data["broadcasts"][current_broadcast]);
@@ -50,24 +66,26 @@ let current_broadcast_media = undefined;
 let current_broadcast_media_type = "unknown";
 
 function on_broadcast_changed(broadcast) {
+  if (broadcast == undefined) return;
   current_broadcast_media = broadcast["broadcast__media"];
-  let file_type = "unknown";
-  if (current_broadcast_media) {
-    let file_end = current_broadcast_media.split(".").pop();
+  current_broadcast_media_type = broadcast["broadcast__media_type"];
+  // let file_type = "unknown";
+  // if (current_broadcast_media) {
+  //   let file_end = current_broadcast_media.split(".").pop();
 
-    if (file_end) {
-      file_end = file_end.toLowerCase();
-      if (file_end == "png" || file_end == "jpg" || file_end == "jpeg") {
-        file_type = "image";
-      } else if (file_end == "mp4" || file_end == "webm" || file_end == "mov") {
-        file_type = "video";
-      }
-    }
-    current_broadcast_media_type = file_type;
-  }
+  //   if (file_end) {
+  //     file_end = file_end.toLowerCase();
+  //     if (file_end == "png" || file_end == "jpg" || file_end == "jpeg") {
+  //       file_type = "image";
+  //     } else if (file_end == "mp4" || file_end == "webm" || file_end == "mov") {
+  //       file_type = "video";
+  //     }
+  //   }
+  //   current_broadcast_media_type = file_type;
+  // }
 
   // if it's a video, we need to play the video tag
-  if (file_type == "video") {
+  if (current_broadcast_media_type == "video") {
     setTimeout(() => {
       play_video();
     }, 10);
@@ -112,10 +130,10 @@ browser &&
     {current_broadcast + 1} / {data &&
       data["broadcasts"] &&
       data["broadcasts"].length}
-    <!-- <br />
+    <br />
     <pre>
-      {JSON.stringify(broadcasts_played, null, 4)}
-    </pre> -->
+      {JSON.stringify($broadcasts_played, null, 4)}
+    </pre>
   </div>
   {#if current_broadcast_media_type == "image"}
     <img

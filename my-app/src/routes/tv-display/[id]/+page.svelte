@@ -60,7 +60,7 @@ import { browser } from "$app/environment";
 //     }
 //     ]
 // }
-
+// let broadcast_list_updated = () => {};
 let api_data = $page.data;
 // header with the time and date
 // forrter with the barcode for the user to scan and the logo of the tv
@@ -73,51 +73,19 @@ onMount(() => {
   update_api_data();
 });
 
-function deepEqual(object1, object2) {
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
-  if (keys1.length !== keys2.length) {
-    return false;
-  }
-  for (const key of keys1) {
-    const val1 = object1[key];
-    const val2 = object2[key];
-    const areObjects = isObject(val1) && isObject(val2);
-    if (
-      (areObjects && !deepEqual(val1, val2)) ||
-      (!areObjects && val1 !== val2)
-    ) {
-      return false;
-    }
-  }
-  return true;
-}
-function isObject(object) {
-  return object != null && typeof object === "object";
-}
-
 async function update_api_data() {
   const response = await fetch($page.url);
   let temp = await response.json();
   // if (!deepEqual(temp, api_data)) {
-  if (temp.updated != api_data.updated) {
-    refresh_api_data();
+  if (api_data.updated == undefined) {
     api_data = temp;
   }
-  console.log(api_data);
+  if (temp.updated != api_data.updated) {
+    window.location.reload();
+  }
 }
 
-function refresh_api_data() {
-  // dispatch the event to the TvContent component
-  const event = new CustomEvent("broadcast_refresh", {
-    detail: {
-      data: api_data,
-    },
-  });
-  document.dispatchEvent(event);
-}
-
-browser && setInterval(update_api_data, 10000);
+browser && setInterval(update_api_data, 5000);
 </script>
 
 <TvHeader />
