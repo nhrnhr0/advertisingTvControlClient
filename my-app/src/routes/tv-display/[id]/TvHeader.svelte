@@ -40,7 +40,6 @@ h4 {
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: #000;
   color: #fff;
   font-size: 2rem;
   font-weight: 700;

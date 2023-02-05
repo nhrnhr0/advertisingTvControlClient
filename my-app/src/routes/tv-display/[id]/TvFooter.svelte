@@ -11,7 +11,6 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #000;
   color: #fff;
   font-size: 2rem;
   font-weight: 700;
