@@ -1,0 +1,10 @@
+# deploy:
+npm i
+npm run build
+
+node -r dotenv/config build
+
+
+
+# .env:
+SVELTEKIT_PORT=3028
