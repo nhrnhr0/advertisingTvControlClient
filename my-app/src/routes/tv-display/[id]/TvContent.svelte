@@ -131,9 +131,6 @@ browser &&
       data["broadcasts"] &&
       data["broadcasts"].length}
     <br />
-    <pre>
-      {JSON.stringify($broadcasts_played, null, 4)}
-    </pre>
   </div>
   {#if current_broadcast_media_type == "image"}
     <img
