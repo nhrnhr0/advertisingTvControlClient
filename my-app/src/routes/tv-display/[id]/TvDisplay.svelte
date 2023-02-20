@@ -3,6 +3,8 @@
 import { browser } from "$app/environment";
 import { onMount } from "svelte";
 import { get_hebrew_date } from "../../../utils/get_hebrew_date";
+import { Circle } from "svelte-loading-spinners";
+import { broadcasts_played_array } from "../../../stores/stores";
 
 /**@type {any} */
 export let data;
@@ -14,14 +16,63 @@ let curr_date_str = "00/00/0000";
 let curr_hebrew_date_str = "";
 
 let start_show_content = false;
-
+let send_played_broadcasts_interval = null;
 onMount(() => {
   setInterval(() => {
     recalc_dates();
   }, 5000);
   recalc_dates();
   load_broadcasts();
+  send_played_broadcasts_interval = setInterval(() => {
+    send_played_broadcasts();
+  }, 10000);
 });
+
+function send_played_broadcasts() {
+  // if (!browser) return;
+  // if ($broadcasts_played_array.length == 0) return;
+  console.log("send_played_broadcasts");
+  let data = { broadcasts: $broadcasts_played_array };
+  // data.append("broadcasts", JSON.stringify(broadcasts_played));
+  let api_url = "/api/broadcasts-played";
+  // import.meta.env.VITE_DJANGO_SERVER_URL +
+  fetch(api_url, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      debugger;
+      if (data["success"]) {
+        let last_uuid_recvied = data["last_uuid_played"];
+        let new_broadcasts_played = [];
+        // filter out all the broadcasts that were played (by uuid)
+        // for (let i = 0; i < $broadcasts_played_array.length; i++) {
+        //   if ($broadcasts_played_array[i]["uuid"] != last_uuid_recvied) {
+        //     new_broadcasts_played.push($broadcasts_played_array[i]);
+        //   } else {
+        //     break;
+        //   }
+        // }
+        // broadcasts_played_array.set(new_broadcasts_played);
+        let idx = $broadcasts_played_array.findIndex((v) => {
+          return v.uuid == last_uuid_recvied;
+        });
+        if (idx != -1) {
+          broadcasts_played_array.update((v) => {
+            v.splice(0, idx + 1);
+            return v;
+          });
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 $: {
   if (data && data["broadcasts"]) {
@@ -39,6 +90,7 @@ function load_broadcasts() {
   let broadcasts = data["broadcasts"];
   let html_container = document.getElementById("hidden-content");
   if (html_container == null) return;
+  if (broadcasts == null) return;
   html_container.innerHTML = "";
   broadcasts_statuses = [];
   const BASE_SRC = import.meta.env.VITE_DJANGO_SERVER_URL;
@@ -101,7 +153,6 @@ function set_broadcast_loop(index) {
   let html_container = document.getElementById("hidden-content");
   if (html_container == null) return;
   let children = html_container.children;
-  debugger;
   for (let i = 0; i < children.length; i++) {
     if (i == index) {
       children[i].style.display = "block";
@@ -110,12 +161,41 @@ function set_broadcast_loop(index) {
     }
   }
   setTimeout(() => {
+    broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
     current_show_index++;
     if (current_show_index >= children.length) {
       current_show_index = 0;
     }
     set_broadcast_loop(current_show_index);
   }, broadcasts_statuses[index]["broadcast"]["duration"] * 1000);
+}
+
+function generage_uuid() {
+  let uuid = "";
+  for (let i = 0; i < 32; i++) {
+    uuid += Math.floor(Math.random() * 16).toString(16);
+  }
+  return uuid;
+}
+
+/**
+ * @param {number} broadcast_id
+ */
+function broadcast_played(broadcast_id) {
+  let t = new Date();
+  t.setDate(t.getDate() - 5);
+  const played_info = {
+    broadcast: broadcast_id,
+    tv_display: data["id"],
+    time: new Date().toISOString(),
+    uuid: generage_uuid(),
+  };
+
+  broadcasts_played_array.update((n) => {
+    // @ts-ignore
+    n.push(played_info);
+    return n;
+  });
 }
 
 function recalc_dates() {
@@ -188,11 +268,16 @@ function recalc_dates() {
       </div>
     </div>
     <div class="content">
-      <!-- <div class="ratio ratio-16x9"> -->
-      <!-- <img src="/temp.jpg" alt="temp" /> -->
-      <!-- {start_show_content}
-      {JSON.stringify(broadcasts_statuses)} -->
-      <div id="hidden-content" />
+      <div
+        id="hidden-content"
+        style="display: {start_show_content ? 'block' : 'none'}"
+      />
+      <!-- <div id="hidden-content" style="display: none" /> -->
+      {#if start_show_content == false}
+        <div class="spinner-wraper">
+          <Circle size="360" color="#FF3E00" unit="px" duration="1.3s" />
+        </div>
+      {/if}
       <!-- </div> -->
     </div>
   </div>
@@ -216,6 +301,12 @@ function recalc_dates() {
 </div>
 
 <style lang="scss">
+.spinner-wraper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 #hidden-content {
   // display: none;
 }

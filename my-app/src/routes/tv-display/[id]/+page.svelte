@@ -1,8 +1,8 @@
 <script>
 import { onMount } from "svelte";
-import TvContent from "./TvContent.svelte";
-import TvFooter from "./TvFooter.svelte";
-import TvHeader from "./TvHeader.svelte";
+// import TvContent from "./TvContent.svelte";
+// import TvFooter from "./TvFooter.svelte";
+// import TvHeader from "./TvHeader.svelte";
 import { page } from "$app/stores";
 import { browser } from "$app/environment";
 import TvDisplay from "./TvDisplay.svelte";
@@ -25,7 +25,7 @@ async function update_api_data() {
   }
 }
 
-browser && setInterval(update_api_data, 10000);
+browser && setInterval(update_api_data, 100000);
 </script>
 
 <!-- <TvHeader />
