@@ -45,7 +45,6 @@ function send_played_broadcasts() {
   })
     .then((response) => response.json())
     .then((data) => {
-      debugger;
       if (data["success"]) {
         let last_uuid_recvied = data["last_uuid_played"];
         let new_broadcasts_played = [];
@@ -257,11 +256,7 @@ function recalc_dates() {
   </div>
   <div class="content-and-right-flex">
     <div class="right-wraper">
-      <h3>
-        מפרסם
-        <br />
-        המודעה
-      </h3>
+      <h2>מפרסם המודעה</h2>
       <div class="publisher-phone">054-123-4567</div>
       <div class="publisher-qr">
         <img src="/qr-code.png" alt="qr" />
@@ -332,11 +327,11 @@ function recalc_dates() {
       // border: 1px solid blue;
       text-align: center;
       flex-grow: 1;
-      h3 {
+      h2 {
         font-size: 65px;
         color: #000000;
         font-weight: 500;
-        font-family: "Frank Ruhl Libre";
+
         text-align: center;
       }
       .publisher-phone {
@@ -344,7 +339,7 @@ function recalc_dates() {
         // line-height: 227px;
         color: #000000;
         font-weight: 400;
-        font-family: "Frank Ruhl Libre";
+
         text-align: center;
       }
 
@@ -391,6 +386,7 @@ function recalc_dates() {
     justify-content: space-between;
     align-items: center;
     height: 60px;
+    margin-top: 15px;
     .bottom-left {
       display: flex;
       flex-direction: row-reverse;
@@ -403,7 +399,7 @@ function recalc_dates() {
         // line-height: 227px;
         color: #000000;
         font-weight: 400;
-        font-family: "Frank Ruhl Libre";
+
         text-align: center;
         display: inline-block;
         width: max-content;
@@ -437,7 +433,7 @@ function recalc_dates() {
         font-size: 2.1rem;
         color: #000000;
         font-weight: 400;
-        font-family: "Frank Ruhl Libre";
+
         text-align: center;
         display: inline-block;
         width: max-content;
@@ -467,8 +463,10 @@ function recalc_dates() {
     // line-height: 227px;
     color: #000000;
     font-weight: 600;
-    font-family: "Frank Ruhl Libre";
+    position: absolute;
     text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .left-side {
@@ -481,6 +479,7 @@ function recalc_dates() {
       // height: 115px;
       color: white;
       margin-bottom: -15px;
+      margin-top: -15px;
       /* border: 1px solid red; */
     }
     .time {
@@ -488,7 +487,7 @@ function recalc_dates() {
       // line-height: 227px;
       color: #000000;
       font-weight: 400;
-      font-family: "Frank Ruhl Libre";
+
       text-align: center;
     }
   }
@@ -497,7 +496,7 @@ function recalc_dates() {
     // line-height: 227px;
     color: #000000;
     font-weight: 400;
-    font-family: "Frank Ruhl Libre";
+
     text-align: center;
     display: flex;
     flex-direction: column;
