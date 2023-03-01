@@ -29,7 +29,7 @@ onMount(() => {
   load_broadcasts();
   send_played_broadcasts_interval = setInterval(() => {
     send_played_broadcasts();
-  }, 10000);
+  }, 60000);
 });
 onDestroy(() => {
   if (send_played_broadcasts_interval) {
@@ -164,6 +164,11 @@ function set_broadcast_loop(index) {
   let children = html_container.children;
   for (let i = 0; i < children.length; i++) {
     if (i == index) {
+      if (broadcasts_statuses[i]["broadcast"]["media_type"] == "video") {
+        children[i].children[0].currentTime = 0;
+        children[i].children[0].play();
+      }
+
       children[i].style.display = "block";
       // children[i].style.visibility = "visible";
     } else {
@@ -194,7 +199,7 @@ function generage_uuid() {
  */
 function broadcast_played(broadcast_id) {
   let t = new Date();
-  t.setDate(t.getDate() - 5);
+  // t.setDate(t.getDate() - 5);
   const played_info = {
     broadcast: broadcast_id,
     tv_display: data["id"],

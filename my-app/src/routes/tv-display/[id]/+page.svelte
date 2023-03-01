@@ -5,9 +5,11 @@ import { onMount } from "svelte";
 // import TvHeader from "./TvHeader.svelte";
 import { page } from "$app/stores";
 import { browser } from "$app/environment";
-import TvDisplay from "./TvDisplay.svelte";
+import TvDisplayFullScreen from "./TvDisplayFullScreen.svelte";
+import BlankFullScreen from "./BlankFullScreen.svelte";
 
 let api_data = $page.data;
+let is_location_open_now = false;
 onMount(() => {
   //   id = window.location;
   update_api_data();
@@ -20,18 +22,36 @@ async function update_api_data() {
   if (api_data.updated == undefined) {
     api_data = temp;
   }
+  console.log("update_api_data", temp);
+
   if (temp.updated != api_data.updated) {
     window.location.reload();
   }
+
+  // if the brodacasts have changed, reload the page
+  if (temp.broadcasts.length != api_data.broadcasts.length) {
+    window.location.reload();
+  }
+  for (let i = 0; i < temp.broadcasts.length; i++) {
+    if (temp.broadcasts[i].uuid != api_data.broadcasts[i].uuid) {
+      window.location.reload();
+    }
+  }
+
+  is_location_open_now = temp.is_opening_hours_active;
 }
 
-browser && setInterval(update_api_data, 100000);
+browser && setInterval(update_api_data, 50000);
 </script>
 
 <!-- <TvHeader />
 <TvContent data={api_data} />
 <TvFooter /> -->
-<TvDisplay data={api_data} />
+{#if is_location_open_now}
+  <TvDisplayFullScreen data={api_data} />
+{:else}
+  <BlankFullScreen />
+{/if}
 
 <style lang="scss">
 :global(body) {
