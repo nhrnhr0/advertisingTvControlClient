@@ -20,6 +20,6 @@ sudo apt-get install -y nodejs
 
 npm install pm2 -g
 
-cp /home/ubuntu/advertisingTvControlClient/nginxGoldTvClient.conf /etc/nginx/conf.d/
+sudo cp /home/ubuntu/advertisingTvControlClient/nginxGoldTvClient.conf /etc/nginx/conf.d/
 
 ./deploy
