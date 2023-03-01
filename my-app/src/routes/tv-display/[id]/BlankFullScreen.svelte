@@ -1,5 +1,5 @@
 <div class="blank">
-  <h1>נשוב לשדר בקרוב</h1>
+  <!-- <h1>נשוב לשדר בקרוב</h1> -->
 </div>
 
 <style lang="scss">
@@ -15,11 +15,5 @@
   background-color: #000;
   height: 100%;
   width: 100%;
-}
-.blank h1 {
-  color: #fff;
-  font-size: 5rem;
-  text-align: center;
-  margin-top: 20%;
 }
 </style>
