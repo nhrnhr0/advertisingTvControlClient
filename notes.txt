@@ -8,3 +8,18 @@ node -r dotenv/config build
 
 # .env:
 SVELTEKIT_PORT=3028
+
+
+
+
+# new mechine instructions:
+
+### install node and npm
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+
+npm install pm2 -g
+
+cp /home/ubuntu/advertisingTvControlClient/nginxGoldTvClient.conf /etc/nginx/conf.d/
+
+./deploy
