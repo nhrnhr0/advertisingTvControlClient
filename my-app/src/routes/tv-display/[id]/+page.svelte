@@ -10,8 +10,10 @@ import BlankFullScreen from "./BlankFullScreen.svelte";
 
 let api_data = $page.data;
 let is_location_open_now = false;
+let uri_key = "";
 onMount(() => {
   //   id = window.location;
+  uri_key = $page.url.searchParams.get("key");
   update_api_data();
 });
 
@@ -48,7 +50,7 @@ browser && setInterval(update_api_data, 50000);
 <TvContent data={api_data} />
 <TvFooter /> -->
 {#if is_location_open_now}
-  <TvDisplayFullScreen data={api_data} />
+  <TvDisplayFullScreen data={api_data} {uri_key} />
 {:else}
   <BlankFullScreen />
 {/if}

@@ -29,7 +29,7 @@ onMount(() => {
   load_broadcasts();
   send_played_broadcasts_interval = setInterval(() => {
     send_played_broadcasts();
-  }, 60000);
+  }, 6000);
 });
 onDestroy(() => {
   if (send_played_broadcasts_interval) {

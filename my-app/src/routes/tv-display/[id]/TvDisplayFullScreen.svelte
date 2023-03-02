@@ -8,6 +8,8 @@ import { broadcasts_played_array } from "../../../stores/stores";
 
 /**@type {any} */
 export let data;
+/**@type {string} */
+export let uri_key;
 let start_show_content = false;
 
 /**
@@ -29,8 +31,8 @@ onDestroy(() => {
 function send_played_broadcasts() {
   // if (!browser) return;
   // if ($broadcasts_played_array.length == 0) return;
-  console.log("send_played_broadcasts");
-  let data = { broadcasts: $broadcasts_played_array };
+  console.log("send_played_broadcasts", $broadcasts_played_array.length);
+  let data = { broadcasts: $broadcasts_played_array, key: uri_key };
   // data.append("broadcasts", JSON.stringify(broadcasts_played));
   let api_url = "/api/broadcasts-played";
   // import.meta.env.VITE_DJANGO_SERVER_URL +
