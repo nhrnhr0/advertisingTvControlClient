@@ -243,7 +243,7 @@ function broadcast_played(broadcast_id) {
 }
 .content {
   height: 100%;
-
+  background-color: #000;
   // flex-grow: 1;
 
   // flex: 3;
