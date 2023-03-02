@@ -217,9 +217,7 @@ function broadcast_played(broadcast_id) {
   />
   <!-- <div id="hidden-content" style="display: none" /> -->
   {#if start_show_content == false}
-    <div class="spinner-wraper">
-      <Circle size="360" color="#FF3E00" unit="px" duration="1.3s" />
-    </div>
+    <div style="color:white; font-size: 12px; text-align: center">.</div>
   {/if}
   <!-- </div> -->
 </div>
