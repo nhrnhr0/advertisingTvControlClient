@@ -10,6 +10,8 @@ import { broadcasts_played_array } from "../../../stores/stores";
 export let data;
 /**@type {string} */
 export let uri_key;
+export let page_refresh_needed = false;
+export let no_broadcasts_to_show = false;
 let start_show_content = false;
 
 /**
@@ -81,12 +83,25 @@ let broadcasts_statuses;
 function load_broadcasts() {
   if (!browser) return;
   let broadcasts = data["broadcasts"];
+
   let html_container = document.getElementById("hidden-content");
   if (html_container == null) return;
   if (broadcasts == null) return;
   html_container.innerHTML = "";
   broadcasts_statuses = [];
   const BASE_SRC = import.meta.env.VITE_DJANGO_SERVER_URL;
+  if (broadcasts.length == 0) {
+    no_broadcasts_to_show = true;
+    if (page_refresh_needed) {
+      location.reload();
+      return;
+    } else {
+      setTimeout(() => {
+        load_broadcasts();
+        return;
+      }, 1000);
+    }
+  }
   for (let i = 0; i < broadcasts.length; i++) {
     broadcasts_statuses.push({
       broadcast: {
@@ -173,8 +188,16 @@ function set_broadcast_loop(index) {
     setTimeout(() => {
       broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
       current_show_index++;
-      if (current_show_index >= children.length) {
+      if (current_show_index >= broadcasts_statuses.length) {
         current_show_index = 0;
+        // ifi we are in the end of the loop,
+        // we need to check if we need to refresh the page
+        // to get new broadcasts
+        if (page_refresh_needed) {
+          setTimeout(() => {
+            location.reload();
+          }, 20);
+        }
       }
       set_broadcast_loop(current_show_index);
     }, broad_time);
@@ -193,8 +216,6 @@ function generage_uuid() {
  * @param {number} broadcast_id
  */
 function broadcast_played(broadcast_id) {
-  let t = new Date();
-  // t.setDate(t.getDate() - 5);
   const played_info = {
     broadcast: broadcast_id,
     tv_display: data["id"],

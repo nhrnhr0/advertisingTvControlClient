@@ -11,6 +11,8 @@ import BlankFullScreen from "./BlankFullScreen.svelte";
 let api_data = $page.data;
 let is_location_open_now = false;
 let uri_key = "";
+let page_refresh_needed = false;
+let no_broadcasts_to_show = false;
 onMount(() => {
   //   id = window.location;
   uri_key = $page.url.searchParams.get("key");
@@ -27,19 +29,27 @@ async function update_api_data() {
   console.log("update_api_data", temp);
 
   if (temp.updated != api_data.updated) {
-    window.location.reload();
+    // window.location.reload();
+    page_refresh_needed = true;
+    console.log("page_refresh_needed");
+    return;
   }
 
   // if the brodacasts have changed, reload the page
   if (temp.broadcasts.length != api_data.broadcasts.length) {
-    window.location.reload();
+    // window.location.reload();
+    page_refresh_needed = true;
+    console.log("page_refresh_needed");
+    return;
   }
   for (let i = 0; i < temp.broadcasts.length; i++) {
     if (temp.broadcasts[i].uuid != api_data.broadcasts[i].uuid) {
-      window.location.reload();
+      // window.location.reload();
+      page_refresh_needed = true;
+      console.log("page_refresh_needed");
+      return;
     }
   }
-
   is_location_open_now = temp.is_opening_hours_active;
 }
 
@@ -50,7 +60,12 @@ browser && setInterval(update_api_data, 50000);
 <TvContent data={api_data} />
 <TvFooter /> -->
 {#if is_location_open_now}
-  <TvDisplayFullScreen data={api_data} {uri_key} />
+  <TvDisplayFullScreen
+    data={api_data}
+    {uri_key}
+    {page_refresh_needed}
+    bind:no_broadcasts_to_show
+  />
 {:else}
   <BlankFullScreen />
 {/if}
