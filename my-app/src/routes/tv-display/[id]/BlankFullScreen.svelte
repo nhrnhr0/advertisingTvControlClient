@@ -1,3 +1,12 @@
+<script>
+export let page_refresh_needed = false;
+$: {
+  if (page_refresh_needed) {
+    window.location.reload();
+  }
+}
+</script>
+
 <div class="blank">
   <!-- <h1>נשוב לשדר בקרוב</h1> -->
 </div>
