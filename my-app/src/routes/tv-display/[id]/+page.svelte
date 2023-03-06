@@ -50,6 +50,15 @@ async function update_api_data() {
       return;
     }
   }
+  if (
+    temp.is_opening_hours_active == true &&
+    api_data.is_opening_hours_active == false
+  ) {
+    // window.location.reload();
+    page_refresh_needed = true;
+    console.log("page_refresh_needed");
+    return;
+  }
   is_location_open_now = temp.is_opening_hours_active;
 }
 
@@ -67,7 +76,7 @@ browser && setInterval(update_api_data, 50000);
     bind:no_broadcasts_to_show
   />
 {:else}
-  <BlankFullScreen />
+  <BlankFullScreen {page_refresh_needed} />
 {/if}
 
 <style lang="scss">
