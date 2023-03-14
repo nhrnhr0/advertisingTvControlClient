@@ -276,13 +276,13 @@ function broadcast_played(broadcast_id) {
     <div class="block-2">
       <div class="fotter">
         <div class="fotter-text">
-          רוצים לפרסם במסך? צרו קשר עוד היום - 055-557-1040
           <img
             src="/icons8-phone-48.png"
             alt="phone"
             width="120px"
             height="120px"
           />
+          רוצים לפרסם במסך? צרו קשר עוד היום - 055-557-1040
         </div>
       </div>
     </div>
