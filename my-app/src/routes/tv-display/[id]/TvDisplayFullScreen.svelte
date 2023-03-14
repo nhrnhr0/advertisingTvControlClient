@@ -263,13 +263,13 @@ function broadcast_played(broadcast_id) {
               width="48px"
               height="48px"
             /> -->
-          </div>
+          <!-- </div>
           <div class="business-qr">
             <img
               src="https://chart.googleapis.com/chart?chs=435x435&cht=qr&chl=https://wa.me//972542292115&choe=UTF-8"
               alt="QR"
             />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
