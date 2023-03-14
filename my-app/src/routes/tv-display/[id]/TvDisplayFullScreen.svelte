@@ -257,12 +257,12 @@ function broadcast_played(broadcast_id) {
           <div class="business-name">1234567 123</div>
           <div class="business-phone">
             <div class="phone-text">052-426-9134</div>
-            <img
+            <!-- <img
               src="/icons8-phone-48.png"
               alt="phone"
               width="48px"
               height="48px"
-            />
+            /> -->
           </div>
           <div class="business-qr">
             <img
@@ -397,7 +397,7 @@ function broadcast_played(broadcast_id) {
             font-size: 5rem;
             text-align: center;
             margin-top: 960px;
-            margin-bottom: 297px;
+            margin-bottom: 227px;
             background: #dbdada77;
             color: black;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
