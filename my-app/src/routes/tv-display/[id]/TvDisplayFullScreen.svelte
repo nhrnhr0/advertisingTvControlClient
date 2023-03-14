@@ -309,7 +309,7 @@ function broadcast_played(broadcast_id) {
 .content {
   .wraper {
     .block-1 {
-      height: 93vh;
+      height: 91vh;
       width: 99vw;
       margin: auto;
       display: flex;
@@ -325,7 +325,7 @@ function broadcast_played(broadcast_id) {
       #hidden-content {
         position: relative;
         :global(.frame) {
-          height: 93vh;
+          height: 91vh;
           // border: 3px solid #8e8c8c;
           // border-radius: 10px;
           border-bottom: 5px solid #8e8c8c;
