@@ -252,26 +252,14 @@ function broadcast_played(broadcast_id) {
         <div style="color:white; font-size: 12px; text-align: center">.</div>
       {/if}
 
-      <div class="side-wraper">
+      <!-- <div class="side-wraper">
         <div class="right-size-content">
           <div class="business-name">כולבו גבולות</div>
           <div class="business-phone">
             <div class="phone-text">054-229-2115</div>
-            <!-- <img
-              src="/icons8-phone-48.png"
-              alt="phone"
-              width="48px"
-              height="48px"
-            /> -->
           </div>
-          <!-- <div class="business-qr">
-            <img
-              src="https://chart.googleapis.com/chart?chs=435x435&cht=qr&chl=https://wa.me//972542292115&choe=UTF-8"
-              alt="QR"
-            />
-          </div> -->
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="block-2">
       <div class="fotter">
@@ -322,6 +310,8 @@ function broadcast_played(broadcast_id) {
   .wraper {
     .block-1 {
       height: 90vh;
+      width: 97vw;
+      margin: auto;
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
