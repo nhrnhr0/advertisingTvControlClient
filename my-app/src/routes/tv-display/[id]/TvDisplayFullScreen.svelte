@@ -277,6 +277,12 @@ function broadcast_played(broadcast_id) {
       <div class="fotter">
         <div class="fotter-text">
           רוצים לפרסם במסך? צרו קשר עוד היום - 055-557-1040
+          <img
+            src="/icons8-phone-48.png"
+            alt="phone"
+            width="120px"
+            height="120px"
+          />
         </div>
       </div>
     </div>
@@ -286,6 +292,7 @@ function broadcast_played(broadcast_id) {
 
 <style lang="scss">
 :root {
+  --bg-clr: #ffffffc9;
 }
 * {
   font-family: "Flow Block", cursive;
@@ -373,13 +380,13 @@ function broadcast_played(broadcast_id) {
             // font-size: 60px;
             // font-size: in rem
             font-size: 7.75rem;
-
+            font-weight: bold;
             text-align: center;
             position: absolute;
 
             // width: 320px;
             // position: absolute;
-            background: #ffffffe7;
+            background: var(--bg-clr);
 
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
               rgba(0, 0, 0, 0.12) 0px -12px 30px,
@@ -394,11 +401,15 @@ function broadcast_played(broadcast_id) {
           .business-phone {
             // font-size: 40px;
             // font-size: in red;
-            font-size: 4.8rem;
+            font-size: 4.5rem;
             text-align: center;
             margin-top: 860px;
             margin-bottom: 157px;
-            background: #ffffffe7;
+            display: inline-block;
+
+            display: table-cell;
+            white-space: nowrap;
+            background: var(--bg-clr);
             font-weight: bold;
             color: black;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
@@ -406,10 +417,6 @@ function broadcast_played(broadcast_id) {
               rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
             border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
 
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
               rgba(0, 0, 0, 0.12) 0px -12px 30px,
@@ -436,6 +443,7 @@ function broadcast_played(broadcast_id) {
       // border: 1px solid red;
       text-align: center;
       font-size: 7.5625rem;
+      // 7.5625rem is
       // border: 1px solid red;
 
       font-weight: bolder;
@@ -449,7 +457,7 @@ function broadcast_played(broadcast_id) {
           padding-left: 8px;
           color: black;
           border-radius: 10px;
-          background: #dbdada77;
+          background: var(--bg-clr);
           box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
             rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
             rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
