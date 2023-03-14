@@ -266,7 +266,7 @@ function broadcast_played(broadcast_id) {
           </div>
           <div class="business-qr">
             <img
-              src="https://chart.googleapis.com/chart?chs=235x235&cht=qr&chl=1234567890&choe=UTF-8"
+              src="https://chart.googleapis.com/chart?chs=435x435&cht=qr&chl=1234567890&choe=UTF-8"
               alt="QR"
             />
           </div>
@@ -369,10 +369,10 @@ function broadcast_played(broadcast_id) {
           position: relative;
           .business-name {
             color: black;
-            top: 16px;
+            top: 150px;
             // font-size: 60px;
             // font-size: in rem
-            font-size: 3.75rem;
+            font-size: 6.75rem;
 
             font-weight: bold;
             text-align: center;
@@ -394,7 +394,7 @@ function broadcast_played(broadcast_id) {
           .business-phone {
             // font-size: 40px;
             // font-size: in red;
-            font-size: 2.5rem;
+            font-size: 4.5rem;
             text-align: center;
             margin-top: 360px;
             margin-bottom: 158px;
