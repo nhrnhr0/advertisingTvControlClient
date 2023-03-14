@@ -254,7 +254,7 @@ function broadcast_played(broadcast_id) {
 
       <div class="side-wraper">
         <div class="right-size-content">
-          <div class="business-name">קיבוץ גבולות</div>
+          <div class="business-name">כולבו גבולות</div>
           <div class="business-phone">
             <div class="phone-text">052-426-9134</div>
             <!-- <img
