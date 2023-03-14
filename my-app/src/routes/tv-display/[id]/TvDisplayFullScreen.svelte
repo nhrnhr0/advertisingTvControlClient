@@ -254,7 +254,7 @@ function broadcast_played(broadcast_id) {
 
       <div class="side-wraper">
         <div class="right-size-content">
-          <div class="business-name">כולבו קייטרינג</div>
+          <div class="business-name">1234567 123</div>
           <div class="business-phone">
             <img
               src="/icons8-phone-48.png"
@@ -358,6 +358,7 @@ function broadcast_played(broadcast_id) {
         height: 100%;
         padding-left: 8px;
         padding-right: 8px;
+        width: 20vw;
         .right-size-content {
           display: flex;
           justify-content: center;
@@ -367,15 +368,23 @@ function broadcast_played(broadcast_id) {
           margin-top: 120px;
           position: relative;
           .business-name {
+            color: black;
             top: 16px;
-            font-size: 60px;
+            // font-size: 60px;
+            // font-size: in rem
+            font-size: 3.75rem;
+
             font-weight: bold;
             text-align: center;
             position: absolute;
 
             width: 320px;
             // position: absolute;
-            background: #dddbdbb7;
+            background: #dbdada77;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+              rgba(0, 0, 0, 0.12) 0px -12px 30px,
+              rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+              rgba(0, 0, 0, 0.09) 0px -3px 5px;
             border-radius: 10px;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
               rgba(0, 0, 0, 0.12) 0px -12px 30px,
@@ -383,11 +392,18 @@ function broadcast_played(broadcast_id) {
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
           }
           .business-phone {
-            font-size: 40px;
+            // font-size: 40px;
+            // font-size: in red;
+            font-size: 2.5rem;
             text-align: center;
             margin-top: 360px;
-            margin-bottom: 198px;
-            background: #dddbdbb7;
+            margin-bottom: 158px;
+            background: #dbdada77;
+            color: black;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+              rgba(0, 0, 0, 0.12) 0px -12px 30px,
+              rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+              rgba(0, 0, 0, 0.09) 0px -3px 5px;
             border-radius: 10px;
             display: flex;
             justify-content: center;
@@ -413,11 +429,12 @@ function broadcast_played(broadcast_id) {
       }
     } // block-1
     .block-2 {
-      width: calc(100% - 336px);
+      width: calc(100%);
       height: 10vh;
       // border: 1px solid red;
       text-align: center;
-      font-size: 40px;
+      font-size: 4.0625rem;
+      // border: 1px solid red;
 
       font-weight: bolder;
       .fotter {
@@ -428,8 +445,9 @@ function broadcast_played(broadcast_id) {
         .fotter-text {
           padding-right: 8px;
           padding-left: 8px;
-          background: #dddbdbb7;
+          color: black;
           border-radius: 10px;
+          background: #dbdada77;
           box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
             rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
             rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
