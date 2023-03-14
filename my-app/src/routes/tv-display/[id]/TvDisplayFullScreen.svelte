@@ -379,7 +379,8 @@ function broadcast_played(broadcast_id) {
 
             // width: 320px;
             // position: absolute;
-            background: #dbdada77;
+            background: #ffffffe7;
+
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
               rgba(0, 0, 0, 0.12) 0px -12px 30px,
               rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
@@ -393,11 +394,11 @@ function broadcast_played(broadcast_id) {
           .business-phone {
             // font-size: 40px;
             // font-size: in red;
-            font-size: 5rem;
+            font-size: 4.8rem;
             text-align: center;
             margin-top: 860px;
             margin-bottom: 157px;
-            background: #dbdada77;
+            background: #ffffffe7;
             font-weight: bold;
             color: black;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
