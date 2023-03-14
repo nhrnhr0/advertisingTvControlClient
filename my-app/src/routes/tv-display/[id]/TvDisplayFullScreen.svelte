@@ -374,7 +374,6 @@ function broadcast_played(broadcast_id) {
             // font-size: in rem
             font-size: 7.75rem;
 
-            font-weight: bold;
             text-align: center;
             position: absolute;
 
@@ -399,6 +398,7 @@ function broadcast_played(broadcast_id) {
             margin-top: 960px;
             margin-bottom: 227px;
             background: #dbdada77;
+            font-weight: bold;
             color: black;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
               rgba(0, 0, 0, 0.12) 0px -12px 30px,
