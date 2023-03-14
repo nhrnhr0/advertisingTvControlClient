@@ -256,13 +256,13 @@ function broadcast_played(broadcast_id) {
         <div class="right-size-content">
           <div class="business-name">1234567 123</div>
           <div class="business-phone">
-            <img
+            <div class="phone-text">052-426-9134</div>
+            <!-- <img
               src="/icons8-phone-48.png"
               alt="phone"
               width="48px"
               height="48px"
-            />
-            <div class="phone-text">052-426-9134</div>
+            /> -->
           </div>
           <div class="business-qr">
             <img
@@ -369,16 +369,16 @@ function broadcast_played(broadcast_id) {
           position: relative;
           .business-name {
             color: black;
-            top: 150px;
+            top: 200px;
             // font-size: 60px;
             // font-size: in rem
-            font-size: 6.75rem;
+            font-size: 7.75rem;
 
             font-weight: bold;
             text-align: center;
             position: absolute;
 
-            width: 320px;
+            // width: 320px;
             // position: absolute;
             background: #dbdada77;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
@@ -396,8 +396,8 @@ function broadcast_played(broadcast_id) {
             // font-size: in red;
             font-size: 4.5rem;
             text-align: center;
-            margin-top: 360px;
-            margin-bottom: 158px;
+            margin-top: 560px;
+            margin-bottom: 258px;
             background: #dbdada77;
             color: black;
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
@@ -433,7 +433,7 @@ function broadcast_played(broadcast_id) {
       height: 10vh;
       // border: 1px solid red;
       text-align: center;
-      font-size: 4.0625rem;
+      font-size: 6.0625rem;
       // border: 1px solid red;
 
       font-weight: bolder;
