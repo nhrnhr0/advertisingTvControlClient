@@ -256,7 +256,7 @@ function broadcast_played(broadcast_id) {
         <div class="right-size-content">
           <div class="business-name">כולבו גבולות</div>
           <div class="business-phone">
-            <div class="phone-text">052-426-9134</div>
+            <div class="phone-text">054-229-2115</div>
             <!-- <img
               src="/icons8-phone-48.png"
               alt="phone"
