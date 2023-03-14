@@ -358,7 +358,7 @@ function broadcast_played(broadcast_id) {
         height: 100%;
         padding-left: 8px;
         padding-right: 8px;
-        width: 20vw;
+        width: 15vw;
         .right-size-content {
           display: flex;
           justify-content: center;
