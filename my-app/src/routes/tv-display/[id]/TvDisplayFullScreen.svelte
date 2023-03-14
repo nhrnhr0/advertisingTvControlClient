@@ -389,9 +389,9 @@ function broadcast_played(broadcast_id) {
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
           }
           .business-phone {
-            // font-size: 40px;
+            font-size: 40px;
             // font-size: in red;
-            font-size: 4.5rem;
+            // font-size: 4.5rem;
             text-align: center;
             margin-top: 860px;
             margin-bottom: 157px;
@@ -432,8 +432,9 @@ function broadcast_played(broadcast_id) {
       height: 10vh;
       // border: 1px solid red;
       text-align: center;
-      font-size: 7.5625rem;
-      // 7.5625rem is
+      // font-size: 7.5625rem;
+      font-size: 60px;
+      // 7.5625rem is 120px
       // border: 1px solid red;
 
       font-weight: bolder;
