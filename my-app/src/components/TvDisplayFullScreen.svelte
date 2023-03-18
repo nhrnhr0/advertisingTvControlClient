@@ -2,9 +2,9 @@
 // https://weatherwidget.io/
 import { browser } from "$app/environment";
 import { onMount, onDestroy } from "svelte";
-import { get_hebrew_date } from "../../../utils/get_hebrew_date";
+import { get_hebrew_date } from "$utils/get_hebrew_date";
 import { Circle } from "svelte-loading-spinners";
-import { broadcasts_played_array } from "../../../stores/stores";
+import { broadcasts_played_array } from "$stores/stores";
 
 /**@type {any} */
 export let data;
@@ -12,6 +12,7 @@ export let data;
 export let uri_key;
 export let page_refresh_needed = false;
 export let no_broadcasts_to_show = false;
+export let is_demo = false;
 let start_show_content = false;
 
 /**
@@ -20,9 +21,11 @@ let start_show_content = false;
 let send_played_broadcasts_interval; // = setInterval(() => {});
 onMount(() => {
   load_broadcasts();
-  send_played_broadcasts_interval = setInterval(() => {
-    send_played_broadcasts();
-  }, 60000);
+  if (!is_demo) {
+    send_played_broadcasts_interval = setInterval(() => {
+      send_played_broadcasts();
+    }, 60000);
+  }
 });
 onDestroy(() => {
   if (send_played_broadcasts_interval) {
@@ -186,7 +189,9 @@ function set_broadcast_loop(index) {
     }
 
     setTimeout(() => {
-      broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
+      if (!is_demo) {
+        broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
+      }
       current_show_index++;
       if (current_show_index >= broadcasts_statuses.length) {
         current_show_index = 0;
@@ -311,6 +316,7 @@ function broadcast_played(broadcast_id) {
     .block-1 {
       height: 91vh;
       width: 99vw;
+      width: calc(16 / 9 * 97vh);
       margin: auto;
       display: flex;
       justify-content: flex-start;
@@ -330,7 +336,9 @@ function broadcast_played(broadcast_id) {
           // border-radius: 10px;
           border-bottom: 5px solid #8e8c8c;
           border-right: 5px solid #8e8c8c;
+          border-left: 5px solid #8e8c8c;
           border-bottom-right-radius: 10px;
+          border-bottom-left-radius: 10px;
           :global(img),
           :global(video) {
             border-bottom-right-radius: 10px;
@@ -452,6 +460,9 @@ function broadcast_played(broadcast_id) {
           box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
             rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
             rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
     }
