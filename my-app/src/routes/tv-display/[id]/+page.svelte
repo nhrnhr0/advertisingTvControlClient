@@ -5,8 +5,8 @@ import { onMount } from "svelte";
 // import TvHeader from "./TvHeader.svelte";
 import { page } from "$app/stores";
 import { browser } from "$app/environment";
-import TvDisplayFullScreen from "./TvDisplayFullScreen.svelte";
-import BlankFullScreen from "./BlankFullScreen.svelte";
+import TvDisplayFullScreen from "$components/TvDisplayFullScreen.svelte";
+import BlankFullScreen from "$components/BlankFullScreen.svelte";
 
 let api_data = $page.data;
 let is_location_open_now = false;
