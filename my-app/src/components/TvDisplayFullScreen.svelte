@@ -5,6 +5,7 @@ import { onMount, onDestroy } from "svelte";
 import { get_hebrew_date } from "$utils/get_hebrew_date";
 import { Circle } from "svelte-loading-spinners";
 import { broadcasts_played_array } from "$stores/stores";
+import { Marquee, loop } from "dynamic-marquee";
 
 /**@type {any} */
 export let data;
@@ -19,6 +20,7 @@ let start_show_content = false;
  * @type {string | number | NodeJS.Timer | undefined}
  */
 let send_played_broadcasts_interval; // = setInterval(() => {});
+
 onMount(() => {
   load_broadcasts();
   if (!is_demo) {
@@ -26,7 +28,32 @@ onMount(() => {
       send_played_broadcasts();
     }, 60000);
   }
+  try_init_marquee();
 });
+function try_init_marquee() {
+  debugger;
+  const marquee = new Marquee(window.document.getElementById("marquee"), {
+    // options here
+    direction: "left",
+    rate: 200,
+  });
+  loop(
+    marquee,
+    [
+      () =>
+        `!📞 רוצים לפרסם במסך או במסכים אחרים? צרו קשר עוד היום ללא התחייבות 055-557-1040
+        `,
+      () =>
+        `!📞 רוצים לפרסם במסך או במסכים אחרים? צרו קשר עוד היום ללא התחייבות 055-557-1040`,
+    ],
+    () => {
+      const separator = document.createElement("div");
+      separator.innerHTML =
+        "•&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+      return separator;
+    }
+  );
+}
 onDestroy(() => {
   if (send_played_broadcasts_interval) {
     clearInterval(send_played_broadcasts_interval);
@@ -267,15 +294,9 @@ function broadcast_played(broadcast_id) {
       </div> -->
     </div>
     <div class="block-2">
-      <div class="fotter">
-        <div class="fotter-text">
-          <img
-            src="/icons8-phone-48.png"
-            alt="phone"
-            width="120px"
-            height="120px"
-          />
-          רוצים לפרסם במסך? צרו קשר עוד היום - 055-557-1040
+      <div class="fotter hwrap">
+        <div class="hmove" id="marquee">
+          <div class="fotter-text hitem marquee" />
         </div>
       </div>
     </div>
@@ -451,15 +472,13 @@ function broadcast_played(broadcast_id) {
         justify-content: center;
         align-items: center;
         height: 100%;
+        background: var(--bg-clr);
         .fotter-text {
+          width: 100vw;
           padding-right: 8px;
           padding-left: 8px;
           color: black;
           border-radius: 10px;
-          background: var(--bg-clr);
-          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-            rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-            rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
           display: flex;
           justify-content: center;
           align-items: center;
