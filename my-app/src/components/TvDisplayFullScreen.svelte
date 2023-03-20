@@ -305,11 +305,6 @@ function broadcast_played(broadcast_id) {
 </div>
 
 <style lang="scss">
-.marquee {
-  width: 100vw !important;
-  color: blue !important;
-  // overflow: hidden;
-}
 :root {
   --bg-clr: #ffffffc9;
 }
