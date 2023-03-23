@@ -287,8 +287,8 @@ function broadcast_played(broadcast_id) {
           <img
             src="/icons8-phone-48.png"
             alt="phone"
-            width="120px"
-            height="120px"
+            width="110px"
+            height="110px"
           />
           רוצים לפרסם במסך? צרו קשר עוד היום - 055-557-1040
         </div>
