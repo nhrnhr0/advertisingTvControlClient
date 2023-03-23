@@ -121,13 +121,23 @@ function load_broadcasts() {
     broadcasts_statuses = [...broadcasts_statuses];
     if (broadcasts[i]["broadcast__media_type"] == "video") {
       let video = document.createElement("video");
-      video.src = BASE_SRC + broadcasts[i]["broadcast__media"];
+
       video.preload = "auto";
       video.autoplay = true;
-      video.oncanplaythrough = () => {
-        broadcasts_statuses[i]["is_loaded"] = true;
+      broadcasts_statuses[i]["is_loaded"] = true;
+      video.oncanplay = () => {
         // if all is loaded, we can start play
         check_if_all_loaded();
+      };
+      video.onerror = () => {
+        console.error(
+          `Error ${video?.error?.code}; details: ${video?.error?.message}`
+        );
+        // if we we will remove the video from the DOM, it will not be played
+        // and remove the broadcast from the broadcasts_statuses
+        broadcasts_statuses.splice(i + 1, 1);
+        broadcasts_statuses = [...broadcasts_statuses];
+        broadcasts.splice(i + 1, 1);
       };
       video.autoplay = true;
       video.loop = true;
@@ -137,6 +147,7 @@ function load_broadcasts() {
       video_frame.className = "frame";
       video_frame.appendChild(video);
       html_container.appendChild(video_frame);
+      video.src = BASE_SRC + broadcasts[i]["broadcast__media"];
     } else {
       let image = document.createElement("img");
       image.src = BASE_SRC + broadcasts[i]["broadcast__media"];
@@ -149,6 +160,7 @@ function load_broadcasts() {
       image_frame.className = "frame";
       image_frame.appendChild(image);
       html_container.appendChild(image_frame);
+      image.src = BASE_SRC + broadcasts[i]["broadcast__media"];
     }
   }
 }
@@ -337,14 +349,14 @@ function broadcast_played(broadcast_id) {
           height: 91vh;
           // border: 3px solid #8e8c8c;
           // border-radius: 10px;
-          border-bottom: 5px solid #8e8c8c;
-          border-right: 5px solid #8e8c8c;
-          border-left: 5px solid #8e8c8c;
+          // border-bottom: 5px solid #8e8c8c;
+          // border-right: 5px solid #8e8c8c;
+          // border-left: 5px solid #8e8c8c;
           border-bottom-right-radius: 10px;
           border-bottom-left-radius: 10px;
           :global(img),
           :global(video) {
-            border-bottom-right-radius: 10px;
+            // border-bottom-right-radius: 10px;
             // border-radius: 10px;
             aspect-ratio: 16 / 9;
             // width: auto;
