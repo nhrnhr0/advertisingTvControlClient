@@ -20,7 +20,7 @@ onMount(() => {
 });
 
 async function update_api_data() {
-  const response = await fetch($page.url);
+  const response = await fetch("/api/tv-display/" + $page.params.id);
   let temp = await response.json();
   // if (!deepEqual(temp, api_data)) {
   if (api_data.updated == undefined) {
