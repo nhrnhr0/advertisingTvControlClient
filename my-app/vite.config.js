@@ -11,6 +11,9 @@ const config = {
 			'$stores': path.resolve('./src/stores/'),
         },
     },
+    server: {
+        host: '127.0.0.1'
+    },
 	plugins: [sveltekit()]
 };
 
