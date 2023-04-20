@@ -25,6 +25,7 @@ function truncateString(str, num) {
   <table>
     <thead>
       <tr>
+        <th>ID</th>
         <th>שם</th>
         <th>פרטים</th>
         <th>טלוויזיות</th>
@@ -35,6 +36,7 @@ function truncateString(str, num) {
     <tbody>
       {#each data as ad}
         <tr>
+          <td>{ad.id}</td>
           <td>
             <img
               src={MEDIA_URL + ad.broadcast__media}
@@ -47,6 +49,8 @@ function truncateString(str, num) {
           </td>
           <td>
             מאסטר: {ad.master ? "כן" : "לא"}<br />
+            סדר: {ad.order}<br />
+            משך: {ad.duration} שניות
           </td>
           <td>
             <ul>
@@ -69,12 +73,15 @@ function truncateString(str, num) {
             {/if}
           </td>
           <td>
-            <a href="/dashboard/ads-in-tvs/{ad.broadcast}/edit">ערוך</a>
+            <a href="/dashboard/ads-in-tvs/{ad.id}/edit">ערוך</a>
           </td>
         </tr>
       {/each}
     </tbody>
   </table>
+
+  <!-- link to create new broadcast in tvs -->
+  <a href="/dashboard/ads-in-tvs/new">הוספה</a>
 {/if}
 
 <!-- [ { "broadcast": 2, "broadcast__name": "WhatsApp Image 2023-03-20 at 08.44.08 (1).jpeg", "broadcast__media": "/media/broadcasts/WhatsApp_Image_2023-03-20_at_08.44.08_1_kjEyKVl.jpeg", "broadcast__media_type": "image", "duration": 20, "order": 10, "updated": "2023-04-14T02:08:32.649549+03:00", "created": "2023-04-14T01:29:33.229301+03:00", "master": false, "tvs_list": [ { "id": 1, "name": "tv1" } ], "activeSchedule": { "id": 2, "content_type": "plays_countdown", "content": { "plays_left": 100, "telegram_notification_in": 0, "telegram_notification_sent": false } } }, { "broadcast": 1, "broadcast__name": "WhatsApp Image 2023-03-20 at 08.50.33.jpeg", "broadcast__media": "/media/broadcasts/WhatsApp_Image_2023-03-20_at_08.50.33_icFdSkG.jpeg", "broadcast__media_type": "image", "duration": 20, "order": 20, "updated": "2023-04-14T01:29:40.511571+03:00", "created": "2023-04-14T01:29:39.101464+03:00", "master": false, "tvs_list": [ { "id": 1, "name": "tv1" } ], "activeSchedule": null } ] -->

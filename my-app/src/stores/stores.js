@@ -6,3 +6,5 @@ export const  broadcasts_played_array = persisted("broadcasts_played", []);
 
 
 export const user_token = persisted("user_token", '');
+
+export const all_tvs_list = writable(undefined);

@@ -19,7 +19,7 @@ function logout_clicked() {
   <a
     href="/dashboard/ads-in-tvs/"
     class:active={$page.url.pathname === "/dashboard/ads-in-tvs"}
-    >תשדירים
+    >תשדירים בטלוויזיות
   </a>
 </nav>
 
