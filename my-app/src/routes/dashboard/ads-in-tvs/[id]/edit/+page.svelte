@@ -103,7 +103,7 @@ onMount(async () => {
       <br />
       סדר: {data.order}
       <br />
-      מאסטר: {data.master ? "כן" : "לא"}
+      מאסטר: {data.master ? "כן" : "לא"} <br />
       עודכן לאחרונה: {data.updated}
       <br />
       נוצר: {data.created}

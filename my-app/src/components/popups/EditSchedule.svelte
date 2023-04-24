@@ -32,7 +32,7 @@ onMount(() => {
 });
 function option_clicked(option) {
   return () => {
-    if (schedule.content_type == option) {
+    if (schedule?.content_type == option) {
       new_info = { ...schedule };
       return;
     }

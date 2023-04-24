@@ -126,7 +126,26 @@ export async function get_paginated_broadcasts(searchword=undefined) {
     headers: myHeaders,
     // redirect: 'follow'
   };
-  let response = await fetch_wraper(`${API_HOST}/dashboard/broadcasts/?search=${searchword}`, requestOptions);
+  let url = `${API_HOST}/dashboard/get-paginated-broadcasts/`;
+  if (searchword) {
+    url = `${url}?search=${searchword}`
+  }
+  let response = await fetch_wraper(url, requestOptions);
   let data = await response.json();
   return data
+}
+
+
+export async function create_new_broadcast_in_tvs(broadcast_id) {
+  var myHeaders = new Headers();
+  var formdata = new FormData();
+  formdata.append("broadcast_id", broadcast_id);
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: formdata,
+    // redirect: 'follow'
+  };
+  let response = await fetch_wraper(`${API_HOST}/dashboard/create-new-broadcast-in-tvs/`, requestOptions);
+  return response;
 }
