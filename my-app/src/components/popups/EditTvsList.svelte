@@ -64,7 +64,7 @@ const onOkClick = () => {
     });
     loading = true;
   } else {
-    // hide({ selected: ret });
+    hide({ selected: ret });
     new Error("No broadcast_in_tvs_id provided");
   }
 };

@@ -21,6 +21,12 @@ function logout_clicked() {
     class:active={$page.url.pathname === "/dashboard/ads-in-tvs"}
     >תשדירים בטלוויזיות
   </a>
+  <!-- link to /dashboard/calculator מחשבון -->
+  <a
+    href="/dashboard/calculator"
+    class:active={$page.url.pathname === "/dashboard/calculator"}
+    >מחשבון
+  </a>
 </nav>
 
 <slot />
