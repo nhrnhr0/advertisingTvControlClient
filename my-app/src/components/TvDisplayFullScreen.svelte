@@ -181,7 +181,7 @@ function check_if_all_loaded() {
     set_broadcast_loop(current_show_index);
   }
 }
-
+let next_broadcast_timeout;
 function set_broadcast_loop(index) {
   let broad_time = broadcasts_statuses[index]["broadcast"]["duration"] * 1000;
   console.log("set_broadcast_loop", index, " for ", broad_time, "ms");
@@ -196,14 +196,13 @@ function set_broadcast_loop(index) {
         }
 
         children[i].style.display = "block";
-        // children[i].style.visibility = "visible";
       } else {
         children[i].style.display = "none";
         // children[i].style.visibility = "hidden";
       }
     }
 
-    setTimeout(() => {
+    next_broadcast_timeout = setTimeout(() => {
       if (!is_demo) {
         broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
       }
@@ -249,6 +248,35 @@ function broadcast_played(broadcast_id) {
     return n;
   });
 }
+
+function next_broadcast_btn() {
+  if (next_broadcast_timeout) {
+    clearTimeout(next_broadcast_timeout);
+  }
+  current_show_index++;
+  if (current_show_index >= broadcasts_statuses.length) {
+    current_show_index = 0;
+    // ifi we are in the end of the loop,
+    // we need to check if we need to refresh the page
+    // to get new broadcasts
+    if (page_refresh_needed) {
+      setTimeout(() => {
+        location.reload();
+      }, 20);
+    }
+  }
+  set_broadcast_loop(current_show_index);
+}
+function prev_broadcast_btn() {
+  if (next_broadcast_timeout) {
+    clearTimeout(next_broadcast_timeout);
+  }
+  current_show_index--;
+  if (current_show_index < 0) {
+    current_show_index = broadcasts_statuses.length - 1;
+  }
+  set_broadcast_loop(current_show_index);
+}
 </script>
 
 <svelte:head>
@@ -263,6 +291,19 @@ function broadcast_played(broadcast_id) {
 <div class="content">
   <div class="wraper">
     <div class="block-1">
+      {#if is_demo == true}
+        <div class="stats">
+          {current_show_index + 1} / {broadcasts_statuses?.length}
+          <br />
+          {#if broadcasts_statuses && broadcasts_statuses[current_show_index]}
+            {broadcasts_statuses[current_show_index]["broadcast"]?.duration}s
+            <br />
+          {/if}
+
+          <button on:click={next_broadcast_btn}>הבא</button>
+          <button on:click={prev_broadcast_btn}>הקודם</button>
+        </div>
+      {/if}
       <div
         id="hidden-content"
         style="display: {start_show_content ? 'block' : 'none'}"
@@ -299,6 +340,15 @@ function broadcast_played(broadcast_id) {
 </div>
 
 <style lang="scss">
+.stats {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000c9;
+  color: white;
+  padding: 5px;
+  font-size: 12px;
+}
 :root {
   --bg-clr: #ffffffc9;
 }
