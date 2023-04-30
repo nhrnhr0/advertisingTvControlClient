@@ -5,6 +5,7 @@ import { onMount } from "svelte";
 import { get_ads_in_tvs } from "$utils/network";
 import { MEDIA_URL } from "$utils/consts";
 import ScheduleDisplay from "../../../components/ScheduleDisplay.svelte";
+import { API_HOST } from "../../../utils/consts";
 
 let data = null;
 onMount(async () => {
@@ -26,7 +27,7 @@ function truncateString(str, num) {
     <table>
       <thead>
         <tr>
-          <th>ID</th>
+          <th class="table-index">#</th>
           <th>שם</th>
           <th>פרטים</th>
           <th>טלוויזיות</th>
@@ -35,18 +36,39 @@ function truncateString(str, num) {
         </tr>
       </thead>
       <tbody>
-        {#each data as ad}
+        {#each data as ad, i}
           <tr>
-            <td>{ad.id}</td>
+            <td class="table-index">
+              {i + 1}
+            </td>
             <td>
-              <img
-                src={MEDIA_URL + ad.broadcast__media}
-                alt={ad.broadcast__name}
-                width="177.777778px"
-                height="100px"
-              />
+              {#if ad.broadcast__media_type == "image"}
+                <img
+                  src={MEDIA_URL + ad.broadcast__media}
+                  alt={ad.broadcast__name}
+                  width="177.777778px"
+                  height="100px"
+                />
+                <br />
+                תמונה
+              {:else if ad.broadcast__media_type == "video"}
+                <video
+                  src={MEDIA_URL + ad.broadcast__media}
+                  alt={ad.broadcast__name}
+                  width="177.777778px"
+                  height="100px"
+                  controls
+                  pause
+                  loop
+                  muted
+                />
+                <br />
+                סרטון
+              {/if}
               <br />
               {truncateString(ad.broadcast__name, 22)}
+              <br />
+              {ad.broadcast__publisher__name}
             </td>
             <td>
               מאסטר: {ad.master ? "כן" : "לא"}<br />
@@ -57,7 +79,7 @@ function truncateString(str, num) {
               <ul>
                 {#each ad.tvs_list as tv}
                   <li>
-                    <a href="/dashboard/tvs/{tv.id}">{tv.name}</a>
+                    <a href="{API_HOST}/dashboard/tvs/{tv.id}">{tv.name}</a>
                   </li>
                 {/each}
               </ul>
@@ -74,7 +96,7 @@ function truncateString(str, num) {
               {/if}
             </td>
             <td>
-              <a href="/dashboard/ads-in-tvs/{ad.id}/edit">ערוך</a>
+              <a href="/dashboard/ads-in-tvs/{ad.id}/edit">ערוך (ID:{ad.id})</a>
             </td>
           </tr>
         {/each}
@@ -115,6 +137,12 @@ function truncateString(str, num) {
         border-bottom: 1px solid #dddddd;
         td {
           padding: 12px 15px;
+
+          &.table-index {
+            color: #ededed;
+            font-weight: bold;
+            background-color: #848484;
+          }
         }
       }
     }
