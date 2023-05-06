@@ -8,13 +8,13 @@ export async function GET(event) {
     if (inactive === 'true') {
         url += '?inactive=true';
     }
-    console.log('url===>', url);
+    // console.log('url===>', url);
   const response = await event.fetch(url);
   if (!response.ok) {
     throw new Error(response.statusText);
   }
   let json_data = await response.json();
-  console.log('got response from ', url);
+  // console.log('got response from ', url);
     // return json_data; 
     return json(json_data);
 }

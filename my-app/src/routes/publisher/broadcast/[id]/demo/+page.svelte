@@ -16,7 +16,7 @@ onMount(async () => {
     let temp = await get_tv_display_data();
     if (api_data == undefined) {
       api_data = temp;
-    } else if (temp != api_data) {
+    } else if (JSON.stringify(temp) != JSON.stringify(api_data)) {
       api_data = temp;
     }
   }, 3000);
