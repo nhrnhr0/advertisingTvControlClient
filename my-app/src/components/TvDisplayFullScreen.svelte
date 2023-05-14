@@ -235,11 +235,15 @@ function generage_uuid() {
  * @param {number} broadcast_id
  */
 function broadcast_played(broadcast_id) {
+  const b_in_tvs_id = data["broadcasts"].find(
+    (v) => v["broadcast"] == broadcast_id
+  )["id"];
   const played_info = {
     broadcast: broadcast_id,
     tv_display: data["id"],
     time: new Date().toISOString(),
     uuid: generage_uuid(),
+    b_in_tvs_id: b_in_tvs_id,
   };
 
   broadcasts_played_array.update((n) => {
