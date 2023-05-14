@@ -32,107 +32,7 @@ const modal_breakpoints = {
     maxWidth: "48rem",
   },
 };
-
 function fetchtargetRuns() {
-  let data = [
-    {
-      id: 3,
-      name: "tv3",
-      opening_hours: [
-        {
-          id: 5,
-          weekday: 1,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 6,
-          weekday: 2,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 7,
-          weekday: 3,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 8,
-          weekday: 4,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 9,
-          weekday: 5,
-          from_hour: "07:00:00",
-          to_hour: "14:00:00",
-        },
-        {
-          id: 10,
-          weekday: 5,
-          from_hour: "16:00:00",
-          to_hour: "20:00:00",
-        },
-        {
-          id: 11,
-          weekday: 6,
-          from_hour: "07:00:00",
-          to_hour: "14:00:00",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "tv2",
-      opening_hours: [],
-    },
-    {
-      id: 1,
-      name: "tv1",
-      opening_hours: [
-        {
-          id: 1,
-          weekday: 1,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 2,
-          weekday: 2,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 3,
-          weekday: 3,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-        {
-          id: 4,
-          weekday: 4,
-          from_hour: "07:00:00",
-          to_hour: "19:00:00",
-        },
-      ],
-    },
-  ];
-  // data = [
-  //   {
-  //     id: 3,
-  //     name: "tv3",
-  //     opening_hours: [
-  //       {
-  //         id: 5,
-  //         weekday: 5,
-  //         from_hour: "16:00:00",
-  //         to_hour: "17:00:00",
-  //       },
-  //     ],
-  //   },
-  // ];
   displayData.set(data);
 }
 
@@ -142,21 +42,19 @@ function setTargetRuns(e) {
 
 let result = "";
 
-function addSecondsToTimeString(timeString, secondsToAdd) {
+function addMinToTimeString(timeString, minutesToAdd) {
   let hours = parseInt(timeString.substring(0, 2));
   let minutes = parseInt(timeString.substring(2, 4));
-  let seconds = parseInt(timeString.substring(4, 6));
-  let totalSeconds = seconds + secondsToAdd;
-  let carryOverMinutes = Math.floor(totalSeconds / 60);
-  let remainingSeconds = totalSeconds % 60;
-  let totalMinutes = minutes + carryOverMinutes;
+  if (hours === 23 && minutes == 59) {
+    return "2400";
+  }
+  let totalMinutes = minutes + minutesToAdd;
   let carryOverHours = Math.floor(totalMinutes / 60);
   let remainingMinutes = totalMinutes % 60;
   let totalHours = (hours + carryOverHours) % 24;
   let result =
     String(totalHours).padStart(2, "0") +
-    String(remainingMinutes).padStart(2, "0") +
-    String(remainingSeconds).padStart(2, "0");
+    String(remainingMinutes).padStart(2, "0");
   return result;
 }
 
@@ -171,7 +69,7 @@ function getDateFromWeekdayAndWeekNumber(datetimeValue, weekNumber) {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // set the time to midnight
   // const daysToAdd = weekdayNumber - today.getDay() + 7 * (weekNumber - 1); // calculate the number of days to add to reach the given weekday in the given week
   const daysToAdd =
-    weekdayNumber - get_israel_day_number(today) + 7 * (weekNumber - 1); // calculate the number of days to add to reach the given weekday in the given week
+    weekdayNumber - get_israel_day_number(today) + 7 * (weekNumber - 1); // calculate the number of days days to add to reach the given weekday in the given week
 
   today.setDate(today.getDate() + daysToAdd); // add the number of days to the current date to get the date for the given weekday
   today.setHours(hours); // set the hours to the given value
@@ -210,27 +108,39 @@ function daysUntilTargetRuns() {
     return a.weekday - b.weekday;
   });
 
+  // console.log({ sortedFlatSchedule });
+
   sortedFlatSchedule.forEach((daySchedule) => {
-    const key = `${daySchedule.weekday}${daySchedule.from_hour}`.replace(
-      /:/g,
-      ""
-    );
+    // console.log("sorting flat schedule", daySchedule);
 
-    const endhour = daySchedule.to_hour.replace(/:/g, "");
+    const endhour = daySchedule.to_hour.replace(/:/g, "").substring(0, 4);
 
-    let currentHhour = daySchedule.from_hour.replace(/:/g, "");
+    let currentHhour = daySchedule.from_hour.replace(/:/g, "").substring(0, 4);
 
-    while (currentHhour <= endhour) {
+    let runIndex = 0;
+    while (currentHhour < endhour) {
       const key = `${daySchedule.weekday}${currentHhour}`;
+      // console.log({ key, currentHhour });
+
       if (!timeStampedVideoRuns[key]) {
         timeStampedVideoRuns[key] = 0;
       }
-      timeStampedVideoRuns[key] += 1;
-      currentHhour = addSecondsToTimeString(currentHhour, VIDEO_LENGTH * 60);
+
+      if (runIndex === 0) {
+        timeStampedVideoRuns[key] += 1;
+      }
+
+      currentHhour = addMinToTimeString(currentHhour, 1);
+      // console.log({ currentHhour, endhour });
+      runIndex += 1;
+      runIndex = runIndex % 10;
     }
   });
 
+  // console.log({ timeStampedVideoRuns });
+
   while (totalRuns < $targetRuns) {
+    console.log("matching target runs");
     for (let index in timeStampedVideoRuns) {
       if (index > time || weekNum > 0) {
         totalRuns += 1;
@@ -246,6 +156,12 @@ function daysUntilTargetRuns() {
     weekNum += 1;
   }
 
+  console.log({ dateIndex, weekNum });
+
+  dateIndex = Number(String(dateIndex) + "00");
+
+  console.log({ dateIndex });
+
   const targetDate = getDateFromWeekdayAndWeekNumber(dateIndex, weekNum);
 
   const timeDiff = targetDate.getTime() - Date.now();
@@ -255,8 +171,8 @@ function daysUntilTargetRuns() {
   const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) % 7;
   const targethours = Math.floor(timeDiff / (1000 * 60 * 60)) % 24;
   const targetminutes = Math.floor(timeDiff / (1000 * 60)) % 60;
-  //   result = `${$targetRuns} commercial runs will be achieved on ${targetDate.toLocaleString()}:
-  //  which is ${weeks} weeks, ${days} days, ${targethours} hours, ${targetminutes} minutes from now `;
+  // result = `${$targetRuns} commercial runs will be achieved on ${targetDate.toLocaleString()}:
+  //                 which is ${weeks} weeks, ${days} days, ${targethours} hours, ${targetminutes} minutes from now `;
   const hebrew_date = targetDate.toLocaleString("he-IL", {
     timeZone: "Asia/Jerusalem",
   });
@@ -291,17 +207,15 @@ function edit_tvs_btn() {
       console.log(error.message); // 'Something went wrong'
     });
 }
-
 onMount(async () => {
   $all_tvs_list = await fetch_all_tvs_list();
+  // await fetchtargetRuns();
 });
 </script>
 
-<!-- button to choose the tvs list -->
 <button class="btn btn-primary" on:click={edit_tvs_btn}>
   ערוך רשימת טלויזיות
 </button>
-
 <div class="w-[240px]">
   <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900"
     >Number of Displays</label
@@ -322,7 +236,6 @@ onMount(async () => {
       </div>
     {/each}
   </div>
-
   <input
     type="number"
     id="number_of_displays"
@@ -335,6 +248,7 @@ onMount(async () => {
   <button
     class="px-4 py-2 mt-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
     on:click={daysUntilTargetRuns}
+    disabled={!$displayData.length || !$targetRuns}
   >
     חשב
   </button>
