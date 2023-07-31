@@ -130,17 +130,13 @@ function load_broadcasts() {
         check_if_all_loaded();
       };
       video.onerror = () => {
-        console.error(
-          `Error ${video?.error?.code}; details: ${video?.error?.message}`
-        );
-        // if we we will remove the video from the DOM, it will not be played
-        // and remove the broadcast from the broadcasts_statuses
-        broadcasts_statuses.splice(i + 1, 1);
+        console.log(`Error ${video?.error?.code}; details: ${video?.error?.message}`);
+        // take out the video from the list
+        broadcasts_statuses.splice(i, 1);
         broadcasts_statuses = [...broadcasts_statuses];
-        broadcasts.splice(i + 1, 1);
       };
       video.autoplay = true;
-      video.loop = true;
+      // video.loop = true;
       video.muted = true;
       video.load();
       let video_frame = document.createElement("div");
@@ -155,6 +151,12 @@ function load_broadcasts() {
         broadcasts_statuses[i]["is_loaded"] = true;
         // if all is loaded, we can start play
         check_if_all_loaded();
+      };
+      image.onerror = () => {
+        console.log(`Error ${image?.error?.code}; details: ${image?.error?.message}`);
+        // take out the video from the list
+        broadcasts_statuses.splice(i, 1);
+        broadcasts_statuses = [...broadcasts_statuses];
       };
       let image_frame = document.createElement("div");
       image_frame.className = "frame";
@@ -179,6 +181,8 @@ function check_if_all_loaded() {
     start_show_content = true;
     current_show_index = 0;
     set_broadcast_loop(current_show_index);
+  } else if (page_refresh_needed) {
+    location.reload();
   }
 }
 let next_broadcast_timeout;
@@ -201,25 +205,46 @@ function set_broadcast_loop(index) {
         // children[i].style.visibility = "hidden";
       }
     }
-
-    next_broadcast_timeout = setTimeout(() => {
-      if (!is_demo) {
-        broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
-      }
-      current_show_index++;
-      if (current_show_index >= broadcasts_statuses.length) {
-        current_show_index = 0;
-        // ifi we are in the end of the loop,
-        // we need to check if we need to refresh the page
-        // to get new broadcasts
-        if (page_refresh_needed) {
-          setTimeout(() => {
-            location.reload();
-          }, 20);
+    if (broadcasts_statuses[index]["broadcast"]["media_type"] == "image") {
+      next_broadcast_timeout = setTimeout(() => {
+        if (!is_demo) {
+          broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
         }
-      }
-      set_broadcast_loop(current_show_index);
-    }, broad_time);
+        current_show_index++;
+        if (current_show_index >= broadcasts_statuses.length) {
+          current_show_index = 0;
+          // ifi we are in the end of the loop,
+          // we need to check if we need to refresh the page
+          // to get new broadcasts
+          if (page_refresh_needed) {
+            setTimeout(() => {
+              location.reload();
+            }, 20);
+          }
+        }
+        set_broadcast_loop(current_show_index);
+      }, broad_time);
+    } else {
+      // if it is video, we need to wait for the video to end
+      children[index].children[0].onended = () => {
+        if (!is_demo) {
+          broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
+        }
+        current_show_index++;
+        if (current_show_index >= broadcasts_statuses.length) {
+          current_show_index = 0;
+          // ifi we are in the end of the loop,
+          // we need to check if we need to refresh the page
+          // to get new broadcasts
+          if (page_refresh_needed) {
+            setTimeout(() => {
+              location.reload();
+            }, 20);
+          }
+        }
+        set_broadcast_loop(current_show_index);
+      };
+    }
   });
 }
 
@@ -235,9 +260,7 @@ function generage_uuid() {
  * @param {number} broadcast_id
  */
 function broadcast_played(broadcast_id) {
-  const b_in_tvs_id = data["broadcasts"].find(
-    (v) => v["broadcast"] == broadcast_id
-  )["id"];
+  const b_in_tvs_id = data["broadcasts"].find((v) => v["broadcast"] == broadcast_id)["id"];
   const played_info = {
     broadcast: broadcast_id,
     tv_display: data["id"],
@@ -286,10 +309,7 @@ function prev_broadcast_btn() {
 <svelte:head>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Flow+Block&family=Rubik:wght@400;600;700;800&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Flow+Block&family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <div class="content">
@@ -308,10 +328,7 @@ function prev_broadcast_btn() {
           <button on:click={prev_broadcast_btn}>הקודם</button>
         </div>
       {/if}
-      <div
-        id="hidden-content"
-        style="display: {start_show_content ? 'block' : 'none'}"
-      />
+      <div id="hidden-content" style="display: {start_show_content ? 'block' : 'none'}" />
       <!-- <div id="hidden-content" style="display: none" /> -->
       {#if start_show_content == false}
         <div style="color:white; font-size: 12px; text-align: center">.</div>
@@ -326,7 +343,7 @@ function prev_broadcast_btn() {
         </div>
       </div> -->
     </div>
-    <div class="block-2">
+    <!-- <div class="block-2">
       <div class="fotter">
         <div class="fotter-text">
           <img
@@ -338,8 +355,7 @@ function prev_broadcast_btn() {
           רוצים לפרסם במסך? צרו קשר עוד היום - 055-557-1040
         </div>
       </div>
-      <!-- </div> -->
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -383,9 +399,9 @@ function prev_broadcast_btn() {
 .content {
   .wraper {
     .block-1 {
-      height: 91vh;
-      width: 99vw;
-      width: calc(16 / 9 * 97vh);
+      // height: 91vh;
+      // width: 99vw;
+      // width: calc(16 / 9 * 97vh);
       margin: auto;
       display: flex;
       justify-content: flex-start;
@@ -400,7 +416,13 @@ function prev_broadcast_btn() {
       #hidden-content {
         position: relative;
         :global(.frame) {
-          height: 91vh;
+          // height: 91vh;
+          --assets-vh: 98vh;
+          height: var(--assets-vh);
+          width: calc(16 / 9 * var(--assets-vh));
+          margin: auto;
+          max-width: 100%;
+          // border: 1px solid red;
           // border: 3px solid #8e8c8c;
           // border-radius: 10px;
           // border-bottom: 5px solid #8e8c8c;
@@ -455,14 +477,10 @@ function prev_broadcast_btn() {
             // position: absolute;
             background: var(--bg-clr);
 
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-              rgba(0, 0, 0, 0.12) 0px -12px 30px,
-              rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
             border-radius: 10px;
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-              rgba(0, 0, 0, 0.12) 0px -12px 30px,
-              rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
           }
           .business-phone {
@@ -479,15 +497,11 @@ function prev_broadcast_btn() {
             background: var(--bg-clr);
             font-weight: bold;
             color: black;
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-              rgba(0, 0, 0, 0.12) 0px -12px 30px,
-              rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
             border-radius: 10px;
 
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-              rgba(0, 0, 0, 0.12) 0px -12px 30px,
-              rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
               rgba(0, 0, 0, 0.09) 0px -3px 5px;
           }
           .business-qr {
