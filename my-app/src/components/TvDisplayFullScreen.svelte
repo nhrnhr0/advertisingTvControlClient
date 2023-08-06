@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
 // https://weatherwidget.io/
 import { browser } from "$app/environment";
 import { onMount, onDestroy } from "svelte";
@@ -23,7 +25,7 @@ let start_show_content = false;
 let send_played_broadcasts_interval; // = setInterval(() => {});
 
 onMount(() => {
-  load_broadcasts();
+  start_loop_if_there_is_broadcasts();
   if (!is_demo) {
     send_played_broadcasts_interval = setInterval(() => {
       send_played_broadcasts();
@@ -77,175 +79,234 @@ function send_played_broadcasts() {
 
 $: {
   if (data && data["broadcasts"]) {
-    load_broadcasts();
+    start_loop_if_there_is_broadcasts();
   }
 }
 
-/**
- * @type {any[]}
- */
-let broadcasts_statuses;
-
-function load_broadcasts() {
-  if (!browser) return;
-  let broadcasts = data["broadcasts"];
-
+function start_loop_if_there_is_broadcasts() {
   let html_container = document.getElementById("hidden-content");
   if (html_container == null) return;
-  if (broadcasts == null) return;
-  html_container.innerHTML = "";
-  broadcasts_statuses = [];
-  const BASE_SRC = import.meta.env.VITE_DJANGO_SERVER_URL;
-  if (broadcasts.length == 0) {
-    no_broadcasts_to_show = true;
-    if (page_refresh_needed) {
-      location.reload();
-      return;
-    } else {
-      setTimeout(() => {
-        load_broadcasts();
-        return;
-      }, 1000);
-    }
-  }
-  for (let i = 0; i < broadcasts.length; i++) {
-    broadcasts_statuses.push({
-      broadcast: {
-        id: broadcasts[i]["broadcast"],
-        media_type: broadcasts[i]["broadcast__media_type"],
-        media: BASE_SRC + broadcasts[i]["broadcast__media"],
-        duration: broadcasts[i]["duration"],
-      },
-      is_loaded: false,
-    });
-    broadcasts_statuses = [...broadcasts_statuses];
-    if (broadcasts[i]["broadcast__media_type"] == "video") {
-      let video = document.createElement("video");
-
-      video.preload = "auto";
-      video.autoplay = true;
-      broadcasts_statuses[i]["is_loaded"] = true;
-      video.oncanplay = () => {
-        // if all is loaded, we can start play
-        check_if_all_loaded();
-      };
-      video.onerror = () => {
-        console.log(`Error ${video?.error?.code}; details: ${video?.error?.message}`);
-        // take out the video from the list
-        broadcasts_statuses.splice(i, 1);
-        broadcasts_statuses = [...broadcasts_statuses];
-      };
-      video.autoplay = true;
-      // video.loop = true;
-      video.muted = true;
-      video.load();
-      let video_frame = document.createElement("div");
-      video_frame.className = "frame";
-      video_frame.appendChild(video);
-      html_container.appendChild(video_frame);
-      video.src = BASE_SRC + broadcasts[i]["broadcast__media"];
-    } else {
-      let image = document.createElement("img");
-      image.src = BASE_SRC + broadcasts[i]["broadcast__media"];
-      image.onload = () => {
-        broadcasts_statuses[i]["is_loaded"] = true;
-        // if all is loaded, we can start play
-        check_if_all_loaded();
-      };
-      image.onerror = () => {
-        console.log(`Error ${image?.error?.code}; details: ${image?.error?.message}`);
-        // take out the video from the list
-        broadcasts_statuses.splice(i, 1);
-        broadcasts_statuses = [...broadcasts_statuses];
-      };
-      let image_frame = document.createElement("div");
-      image_frame.className = "frame";
-      image_frame.appendChild(image);
-      html_container.appendChild(image_frame);
-      image.src = BASE_SRC + broadcasts[i]["broadcast__media"];
-    }
-  }
-}
-
-let current_show_index = 0;
-
-function check_if_all_loaded() {
-  let all_loaded = broadcasts_statuses.length > 0;
-  for (let i = 0; i < broadcasts_statuses.length; i++) {
-    if (!broadcasts_statuses[i]["is_loaded"]) {
-      all_loaded = false;
-      break;
-    }
-  }
-  if (all_loaded && !start_show_content) {
+  if (data && data["broadcasts"] && start_show_content == false) {
     start_show_content = true;
     current_show_index = 0;
     set_broadcast_loop(current_show_index);
-  } else if (page_refresh_needed) {
-    location.reload();
   }
 }
+
+const BASE_SRC = import.meta.env.VITE_DJANGO_SERVER_URL;
+
+// /**
+//  * @type {any[]}
+//  */
+// let broadcasts_statuses;
+
+// function load_broadcasts() {
+//   debugger;
+//   if (!browser) return;
+//   let broadcasts = data["broadcasts"];
+
+//   let html_container = document.getElementById("hidden-content");
+//   if (html_container == null) return;
+//   if (broadcasts == null) return;
+//   html_container.innerHTML = "";
+//   broadcasts_statuses = [];
+//   const BASE_SRC = import.meta.env.VITE_DJANGO_SERVER_URL;
+//   if (broadcasts.length == 0) {
+//     no_broadcasts_to_show = true;
+//     if (page_refresh_needed) {
+//       location.reload();
+//       return;
+//     } else {
+//       setTimeout(() => {
+//         load_broadcasts();
+//         return;
+//       }, 1000);
+//     }
+//   }
+//   for (let i = 0; i < broadcasts.length; i++) {
+//     broadcasts_statuses.push({
+//       broadcast: {
+//         id: broadcasts[i]["broadcast"],
+//         media_type: broadcasts[i]["broadcast__media_type"],
+//         media: BASE_SRC + broadcasts[i]["broadcast__media"],
+//         duration: broadcasts[i]["duration"],
+//       },
+//       is_loaded: false,
+//     });
+//     broadcasts_statuses = [...broadcasts_statuses];
+//     if (broadcasts[i]["broadcast__media_type"] == "video") {
+//       let video = document.createElement("video");
+
+//       video.preload = "auto";
+//       video.autoplay = true;
+//       broadcasts_statuses[i]["is_loaded"] = true;
+//       video.oncanplay = () => {
+//         // if all is loaded, we can start play
+//         check_if_all_loaded();
+//       };
+//       video.onerror = () => {
+//         console.log(`Error ${video?.error?.code}; details: ${video?.error?.message}`);
+//         // take out the video from the list
+//         broadcasts_statuses.splice(i, 1);
+//         broadcasts_statuses = [...broadcasts_statuses];
+//       };
+//       video.autoplay = true;
+//       // video.loop = true;
+//       video.muted = true;
+//       video.load();
+//       let video_frame = document.createElement("div");
+//       video_frame.className = "frame";
+//       video_frame.appendChild(video);
+//       html_container.appendChild(video_frame);
+//       video.src = BASE_SRC + broadcasts[i]["broadcast__media"];
+//     } else {
+//       let image = document.createElement("img");
+//       image.src = BASE_SRC + broadcasts[i]["broadcast__media"];
+//       image.onload = () => {
+//         broadcasts_statuses[i]["is_loaded"] = true;
+//         // if all is loaded, we can start play
+//         check_if_all_loaded();
+//       };
+//       image.onerror = () => {
+//         console.log(`Error ${image?.error?.code}; details: ${image?.error?.message}`);
+//         // take out the video from the list
+//         broadcasts_statuses.splice(i, 1);
+//         broadcasts_statuses = [...broadcasts_statuses];
+//       };
+//       let image_frame = document.createElement("div");
+//       image_frame.className = "frame";
+//       image_frame.appendChild(image);
+//       html_container.appendChild(image_frame);
+//       image.src = BASE_SRC + broadcasts[i]["broadcast__media"];
+//     }
+//   }
+// }
+
+let current_show_index = 0;
+
+// function check_if_all_loaded() {
+//   debugger;
+//   let all_loaded = broadcasts_statuses.length > 0;
+//   for (let i = 0; i < broadcasts_statuses.length; i++) {
+//     if (!broadcasts_statuses[i]["is_loaded"]) {
+//       all_loaded = false;
+//       break;
+//     }
+//   }
+//   if (all_loaded && !start_show_content) {
+//     start_show_content = true;
+//     current_show_index = 0;
+//     set_broadcast_loop(current_show_index);
+//   } else if (page_refresh_needed) {
+//     location.reload();
+//   }
+// }
 let next_broadcast_timeout;
+// @ts-ignore
+let item_id_to_asset_index = {};
+function get_item_asset_index(item) {
+  let item_id = item["id"];
+  if (item_id_to_asset_index[item_id] == null) {
+    item_id_to_asset_index[item_id] = 0;
+  }
+  return item_id_to_asset_index[item_id];
+}
+
+function set_item_next_asset(item) {
+  let item_id = item["id"];
+  if (item_id_to_asset_index[item_id] == null) {
+    item_id_to_asset_index[item_id] = 0;
+  }
+  item_id_to_asset_index[item_id] += 1;
+
+  if (item_id_to_asset_index[item_id] >= item.assets.length) {
+    item_id_to_asset_index[item_id] = 0;
+  }
+  return item_id_to_asset_index[item_id];
+}
+
 function set_broadcast_loop(index) {
-  let broad_time = broadcasts_statuses[index]["broadcast"]["duration"] * 1000;
-  console.log("set_broadcast_loop", index, " for ", broad_time, "ms");
+  // if the index is the first one, we check if page_refresh_needed is true, and if so, we reload the page
+  if (index == 0 && page_refresh_needed) {
+    location.reload();
+    return;
+  }
+  current_show_index = index;
   let html_container = document.getElementById("hidden-content");
   if (html_container == null) return;
-  let children = html_container.children;
-  requestAnimationFrame(() => {
-    for (let i = 0; i < children.length; i++) {
-      if (i == index) {
-        if (broadcasts_statuses[i]["broadcast"]["media_type"] == "video") {
-          children[i].children[0].currentTime = 0;
-        }
 
-        children[i].style.display = "block";
-      } else {
-        children[i].style.display = "none";
-        // children[i].style.visibility = "hidden";
-      }
-    }
-    if (broadcasts_statuses[index]["broadcast"]["media_type"] == "image") {
-      next_broadcast_timeout = setTimeout(() => {
-        if (!is_demo) {
-          broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
-        }
-        current_show_index++;
-        if (current_show_index >= broadcasts_statuses.length) {
-          current_show_index = 0;
-          // ifi we are in the end of the loop,
-          // we need to check if we need to refresh the page
-          // to get new broadcasts
-          if (page_refresh_needed) {
-            setTimeout(() => {
-              location.reload();
-            }, 20);
-          }
-        }
-        set_broadcast_loop(current_show_index);
-      }, broad_time);
-    } else {
-      // if it is video, we need to wait for the video to end
-      children[index].children[0].onended = () => {
-        if (!is_demo) {
-          broadcast_played(broadcasts_statuses[index]["broadcast"]["id"]);
-        }
-        current_show_index++;
-        if (current_show_index >= broadcasts_statuses.length) {
-          current_show_index = 0;
-          // ifi we are in the end of the loop,
-          // we need to check if we need to refresh the page
-          // to get new broadcasts
-          if (page_refresh_needed) {
-            setTimeout(() => {
-              location.reload();
-            }, 20);
-          }
-        }
-        set_broadcast_loop(current_show_index);
-      };
-    }
-  });
+  // we create a new element to replace the old one
+  let item = data.broadcasts[index];
+  // let asset_index = item["asset_index"] || 0;
+  let asset_index = get_item_asset_index(item);
+  let media_type = item.assets[asset_index]["media_type"];
+  let media = BASE_SRC + item.assets[asset_index]["media"];
+  let duration = item["duration"];
+
+  let new_element;
+  if (media_type == "video") {
+    new_element = document.createElement("video");
+    new_element.autoplay = true;
+    new_element.muted = true;
+    new_element.loop = false;
+    new_element.preload = "auto";
+    new_element.src = media;
+  } else {
+    new_element = document.createElement("img");
+    new_element.src = media;
+  }
+  let new_frame = document.createElement("div");
+  new_frame.className = "frame";
+  new_frame.appendChild(new_element);
+
+  // clear old elements and set to new_frame
+  if (html_container) {
+    html_container.innerHTML = "";
+    html_container.appendChild(new_frame);
+  }
+  // we set the timeout to show the next broadcast
+
+  if (media_type == "image") {
+    if (next_broadcast_timeout != null) clearTimeout(next_broadcast_timeout);
+    next_broadcast_timeout = setTimeout(() => {
+      set_broadcast_loop(next_index);
+    }, duration * 1000);
+  } else if (media_type == "video") {
+    new_element.onended = () => {
+      if (next_broadcast_timeout != null) clearTimeout(next_broadcast_timeout);
+      set_broadcast_loop(next_index);
+    };
+    new_element.onerror = () => {
+      if (next_broadcast_timeout != null) clearTimeout(next_broadcast_timeout);
+      set_broadcast_loop(next_index);
+    };
+  }
+
+  // item["asset_index"] = (asset_index + 1) % item.assets.length;
+  set_item_next_asset(item);
+  let next_index = (index + 1) % data.broadcasts.length;
+  setTimeout(() => {
+    preload_asset(next_index);
+  }, 100);
+}
+
+async function preload_asset(index) {
+  let item = data.broadcasts[index];
+  if (item == null) return;
+  // let asset_index = item["asset_index"] || 0;
+  let asset_index = get_item_asset_index(item);
+  let media_type = item.assets[asset_index]["media_type"];
+  let media = BASE_SRC + item.assets[asset_index]["media"];
+  if (media_type == "image") {
+    let img = new Image();
+    img.src = media;
+    await img.decode();
+  } else if (media_type == "video") {
+    const res = await fetch(media);
+    const blob = await res.blob();
+  }
+  console.log("preloaded", media);
+  return true;
 }
 
 function generage_uuid() {
@@ -317,18 +378,11 @@ function prev_broadcast_btn() {
     <div class="block-1">
       {#if is_demo == true}
         <div class="stats">
-          {current_show_index + 1} / {broadcasts_statuses?.length}
-          <br />
-          {#if broadcasts_statuses && broadcasts_statuses[current_show_index]}
-            {broadcasts_statuses[current_show_index]["broadcast"]?.duration}s
-            <br />
-          {/if}
-
           <button on:click={next_broadcast_btn}>הבא</button>
           <button on:click={prev_broadcast_btn}>הקודם</button>
         </div>
       {/if}
-      <div id="hidden-content" style="display: {start_show_content ? 'block' : 'none'}" />
+      <div id="hidden-content" />
       <!-- <div id="hidden-content" style="display: none" /> -->
       {#if start_show_content == false}
         <div style="color:white; font-size: 12px; text-align: center">.</div>

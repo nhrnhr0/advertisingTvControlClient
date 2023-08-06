@@ -9,6 +9,7 @@ import TvDisplayFullScreen from "$components/TvDisplayFullScreen.svelte";
 import BlankFullScreen from "$components/BlankFullScreen.svelte";
 
 let api_data = $page.data;
+let last_data_from_api = {};
 let is_location_open_now = false;
 /** @type {string|null} */
 let uri_key = "";
@@ -85,19 +86,20 @@ async function update_api_data() {
     let temp = await response.json();
 
     // if (!deepEqual(temp, api_data)) {
-    if (api_data.updated == undefined) {
+    if (last_data_from_api?.updated == undefined) {
+      last_data_from_api = temp;
       api_data = temp;
     }
-    if (JSON.stringify(temp) != JSON.stringify(api_data)) {
+    if (JSON.stringify(temp) != JSON.stringify(last_data_from_api)) {
       // api_data = temp;
-      console.log("api_data updated", api_data);
+      console.log("api_data updated", last_data_from_api);
       console.log("temp", temp);
       page_refresh_needed = true;
       console.log("page_refresh_needed");
       return;
     } else {
       console.log("no updates to api_data");
-      console.log("api_data", api_data);
+      console.log("last_data_from_api", last_data_from_api);
     }
   } catch (error) {
     console.log("error updating api_data");
