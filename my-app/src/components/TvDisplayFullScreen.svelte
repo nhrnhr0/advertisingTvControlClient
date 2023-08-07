@@ -19,6 +19,20 @@ export let no_broadcasts_to_show = false;
 export let is_demo = false;
 let start_show_content = false;
 
+let fotters;
+
+$: {
+  if (data && data["fotters"]) {
+    let t = data["fotters"];
+    // t = [{image, title, index}, ...]
+    // sort by index
+    t.sort((a, b) => {
+      return a.index - b.index;
+    });
+    fotters = t;
+  }
+}
+
 /**
  * @type {string | number | NodeJS.Timer | undefined}
  */
@@ -330,11 +344,17 @@ function broadcast_played(broadcast_id) {
     b_in_tvs_id: b_in_tvs_id,
   };
 
-  broadcasts_played_array.update((n) => {
-    // @ts-ignore
-    n.push(played_info);
-    return n;
-  });
+  try {
+    broadcasts_played_array.update((n) => {
+      // @ts-ignore
+      n.push(played_info);
+      return n;
+    });
+  } catch (e) {
+    console.log(e);
+    // reset to empty array
+    broadcasts_played_array.set([]);
+  }
 }
 
 function next_broadcast_btn() {
@@ -383,6 +403,14 @@ function prev_broadcast_btn() {
         </div>
       {/if}
       <div id="hidden-content" />
+      <div class="fotter">
+        {#if fotters}
+          {#each fotters as fotter}
+            <img src={BASE_SRC + fotter.image} class="image-fotter" />
+          {/each}
+        {/if}
+      </div>
+
       <!-- <div id="hidden-content" style="display: none" /> -->
       {#if start_show_content == false}
         <div style="color:white; font-size: 12px; text-align: center">.</div>
@@ -414,6 +442,10 @@ function prev_broadcast_btn() {
 </div>
 
 <style lang="scss">
+:root {
+  --assets-vh: 80vh;
+  --fotter-vh: var(calc(100vh - var(--assets-vh)));
+}
 .stats {
   position: absolute;
   top: 0;
@@ -460,6 +492,19 @@ function prev_broadcast_btn() {
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
+      .fotter {
+        position: absolute;
+        bottom: 0;
+        height: var(--fotter-vh);
+        top: var(--assets-vh);
+        width: 100%;
+        .image-fotter {
+          height: 20vh;
+          max-width: 25vw;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
 
       // flex-grow: 1;
 
@@ -471,7 +516,7 @@ function prev_broadcast_btn() {
         position: relative;
         :global(.frame) {
           // height: 91vh;
-          --assets-vh: 98vh;
+
           height: var(--assets-vh);
           width: calc(16 / 9 * var(--assets-vh));
           margin: auto;
