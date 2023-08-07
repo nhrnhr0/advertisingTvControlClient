@@ -67,8 +67,9 @@ function getDateFromWeekdayAndWeekNumber(datetimeValue, weekNumber) {
 
   const now = new Date(); // create a new Date object with the current date and time
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // set the time to midnight
+  // const daysToAdd = weekdayNumber - today.getDay() + 7 * (weekNumber - 1); // calculate the number of days to add to reach the given weekday in the given week
   const daysToAdd =
-    weekdayNumber - get_israel_day_number(today) + 7 * (weekNumber - 1); // calculate the number of days to add to reach the given weekday in the given week
+    weekdayNumber - get_israel_day_number(today) + 7 * (weekNumber - 1); // calculate the number of days days to add to reach the given weekday in the given week
 
   today.setDate(today.getDate() + daysToAdd); // add the number of days to the current date to get the date for the given weekday
   today.setHours(hours); // set the hours to the given value
@@ -91,6 +92,7 @@ function daysUntilTargetRuns() {
   const hours = now.getHours().toString().padStart(2, "0");
   const minutes = now.getMinutes().toString().padStart(2, "0");
   const seconds = now.getSeconds().toString().padStart(2, "0");
+  // const time = `${now.getDay()}${hours}${minutes}${seconds}`;
   const time = `${get_israel_day_number(now)}${hours}${minutes}${seconds}`;
 
   let totalRuns = 0;
@@ -138,11 +140,10 @@ function daysUntilTargetRuns() {
   // console.log({ timeStampedVideoRuns });
 
   while (totalRuns < $targetRuns) {
-    // console.log("matching target runs");
+    console.log("matching target runs");
     for (let index in timeStampedVideoRuns) {
       if (index > time || weekNum > 0) {
-        // console.log(index, timeStampedVideoRuns[index]);
-        totalRuns += timeStampedVideoRuns[index];
+        totalRuns += 1;
       }
 
       if (totalRuns > $targetRuns) {
@@ -155,11 +156,11 @@ function daysUntilTargetRuns() {
     weekNum += 1;
   }
 
-  // console.log({ dateIndex, weekNum });
+  console.log({ dateIndex, weekNum });
 
   dateIndex = Number(String(dateIndex) + "00");
 
-  // console.log({ dateIndex });
+  console.log({ dateIndex });
 
   const targetDate = getDateFromWeekdayAndWeekNumber(dateIndex, weekNum);
 
@@ -170,13 +171,14 @@ function daysUntilTargetRuns() {
   const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) % 7;
   const targethours = Math.floor(timeDiff / (1000 * 60 * 60)) % 24;
   const targetminutes = Math.floor(timeDiff / (1000 * 60)) % 60;
+  // result = `${$targetRuns} commercial runs will be achieved on ${targetDate.toLocaleString()}:
+  //                 which is ${weeks} weeks, ${days} days, ${targethours} hours, ${targetminutes} minutes from now `;
   const hebrew_date = targetDate.toLocaleString("he-IL", {
     timeZone: "Asia/Jerusalem",
   });
   result = `${$targetRuns} שידורים יגמרו בתאריך: <b>${hebrew_date.toLocaleString()}</b>
  בעוד ${weeks} שבועות, ${days} ימים, ${targethours} שעות, ${targetminutes} דקות מעכשיו`;
 }
-
 function edit_tvs_btn() {
   let existing_tvs = $displayData.map((tv) => {
     return { id: tv.id, name: tv.name };
@@ -206,8 +208,22 @@ function edit_tvs_btn() {
     });
 }
 
+function calculateTotalOpenHours(opening_hours) {
+  let totalHours = 0;
+
+  for (const openingHour of opening_hours) {
+    const fromHour = new Date(`1970-01-01T${openingHour.from_hour}`);
+    const toHour = new Date(`1970-01-01T${openingHour.to_hour}`);
+    const diffInMilliseconds = toHour - fromHour;
+    totalHours += diffInMilliseconds / (1000 * 60 * 60);
+  }
+
+  return totalHours;
+}
+
 onMount(async () => {
   $all_tvs_list = await fetch_all_tvs_list();
+  // await fetchtargetRuns();
 });
 </script>
 
@@ -230,7 +246,10 @@ onMount(async () => {
           id={tv.id}
           name={tv.name}
         />
-        <label for={tv.id}>{tv.name}</label>
+        <label for={tv.id}
+          >{tv.name}
+          {calculateTotalOpenHours(tv.opening_hours)}</label
+        >
       </div>
     {/each}
   </div>

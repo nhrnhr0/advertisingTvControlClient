@@ -15,7 +15,6 @@ export let broadcast_in_tvs_id;
 let new_info = {};
 const onCancelClick = () => cancel("Something went wrong");
 const onOkClick = () => {
-  debugger;
   // send request to update the schedule
   update_active_schedule(broadcast_in_tvs_id, new_info).then((res) => {
     if (res.status === 200) {
