@@ -518,7 +518,8 @@ function prev_broadcast_btn() {
           // height: 91vh;
 
           height: var(--assets-vh);
-          width: calc(16 / 9 * var(--assets-vh));
+          // width: calc(16 / 9 * var(--assets-vh));
+          width: calc(80 / 36 * var(--assets-vh));
           margin: auto;
           max-width: 100%;
           // border: 1px solid red;
@@ -533,7 +534,9 @@ function prev_broadcast_btn() {
           :global(video) {
             // border-bottom-right-radius: 10px;
             // border-radius: 10px;
-            aspect-ratio: 16 / 9;
+            // aspect-ratio: 16 / 9;
+            aspect-ratio: 80 / 36;
+            object-fit: contain;
             // width: auto;
             // height: 100%;
             // // border: 1px solid red;
