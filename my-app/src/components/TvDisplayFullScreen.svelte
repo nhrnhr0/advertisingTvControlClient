@@ -6,7 +6,7 @@ import { browser } from "$app/environment";
 import { onMount, onDestroy } from "svelte";
 import { get_hebrew_date } from "$utils/get_hebrew_date";
 import { Circle } from "svelte-loading-spinners";
-import { broadcasts_played_array } from "$stores/stores";
+// import { broadcasts_played_array } from "$stores/stores";
 
 // import { Marquee, loop } from "dynamic-marquee";
 
@@ -52,50 +52,50 @@ onDestroy(() => {
   }
 });
 
-function send_played_broadcasts() {
-  // if (!browser) return;
-  // if ($broadcasts_played_array.length == 0) return;
-  console.log("send_played_broadcasts", $broadcasts_played_array.length);
-  let data = { broadcasts: $broadcasts_played_array, key: uri_key };
-  // data.append("broadcasts", JSON.stringify(broadcasts_played));
-  let api_url = "/api/broadcasts-played";
-  // import.meta.env.VITE_DJANGO_SERVER_URL +
-  fetch(api_url, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "content-type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data["success"]) {
-        let last_uuid_recvied = data["last_uuid_played"];
-        let new_broadcasts_played = [];
-        // filter out all the broadcasts that were played (by uuid)
-        if (last_uuid_recvied) {
-          let idx = $broadcasts_played_array.findIndex((v) => {
-            return v.uuid == last_uuid_recvied;
-          });
-          if (idx != -1) {
-            broadcasts_played_array.update((v) => {
-              v.splice(0, idx + 1);
-              return v;
-            });
-          }
-        }
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
+// function send_played_broadcasts() {
+//   // if (!browser) return;
+//   // if ($broadcasts_played_array.length == 0) return;
+//   console.log("send_played_broadcasts", $broadcasts_played_array.length);
+//   let data = { broadcasts: $broadcasts_played_array, key: uri_key };
+//   // data.append("broadcasts", JSON.stringify(broadcasts_played));
+//   let api_url = "/api/broadcasts-played";
+//   // import.meta.env.VITE_DJANGO_SERVER_URL +
+//   fetch(api_url, {
+//     method: "POST",
+//     body: JSON.stringify(data),
+//     headers: {
+//       "content-type": "application/json",
+//     },
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data["success"]) {
+//         let last_uuid_recvied = data["last_uuid_played"];
+//         let new_broadcasts_played = [];
+//         // filter out all the broadcasts that were played (by uuid)
+//         if (last_uuid_recvied) {
+//           let idx = $broadcasts_played_array.findIndex((v) => {
+//             return v.uuid == last_uuid_recvied;
+//           });
+//           if (idx != -1) {
+//             broadcasts_played_array.update((v) => {
+//               v.splice(0, idx + 1);
+//               return v;
+//             });
+//           }
+//         }
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error:", error);
+//     });
+// }
 
-$: {
-  if (data && data["broadcasts"]) {
-    start_loop_if_there_is_broadcasts();
-  }
-}
+// $: {
+//   if (data && data["broadcasts"]) {
+//     start_loop_if_there_is_broadcasts();
+//   }
+// }
 
 function start_loop_if_there_is_broadcasts() {
   let html_container = document.getElementById("hidden-content");
@@ -334,28 +334,28 @@ function generage_uuid() {
 /**
  * @param {number} broadcast_id
  */
-function broadcast_played(broadcast_id) {
-  const b_in_tvs_id = data["broadcasts"].find((v) => v["broadcast"] == broadcast_id)["id"];
-  const played_info = {
-    broadcast: broadcast_id,
-    tv_display: data["id"],
-    time: new Date().toISOString(),
-    uuid: generage_uuid(),
-    b_in_tvs_id: b_in_tvs_id,
-  };
+// function broadcast_played(broadcast_id) {
+//   const b_in_tvs_id = data["broadcasts"].find((v) => v["broadcast"] == broadcast_id)["id"];
+//   const played_info = {
+//     broadcast: broadcast_id,
+//     tv_display: data["id"],
+//     time: new Date().toISOString(),
+//     uuid: generage_uuid(),
+//     b_in_tvs_id: b_in_tvs_id,
+//   };
 
-  try {
-    broadcasts_played_array.update((n) => {
-      // @ts-ignore
-      n.push(played_info);
-      return n;
-    });
-  } catch (e) {
-    console.log(e);
-    // reset to empty array
-    broadcasts_played_array.set([]);
-  }
-}
+//   try {
+//     broadcasts_played_array.update((n) => {
+//       // @ts-ignore
+//       n.push(played_info);
+//       return n;
+//     });
+//   } catch (e) {
+//     console.log(e);
+//     // reset to empty array
+//     broadcasts_played_array.set([]);
+//   }
+// }
 
 function next_broadcast_btn() {
   if (next_broadcast_timeout) {
@@ -503,6 +503,8 @@ function prev_broadcast_btn() {
           max-width: 25vw;
           width: 100%;
           object-fit: contain;
+          border-left: 1px solid #000;
+          border-right: 1px solid #000;
         }
       }
 
