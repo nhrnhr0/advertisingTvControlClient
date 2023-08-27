@@ -56,7 +56,6 @@ function edit_tvs_btn() {
 }
 
 function edit_active_schedule_btn() {
-  debugger;
   smodale
     .show(
       PopupEditSchedule,
@@ -64,7 +63,6 @@ function edit_active_schedule_btn() {
       { breakpoints: modal_breakpoints }
     )
     .then((res) => {
-      debugger;
       data.activeSchedule = res.schedule;
     })
     .catch((error) => {

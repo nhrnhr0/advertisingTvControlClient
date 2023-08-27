@@ -12,6 +12,8 @@ sudo apt-get install -y nodejs
 
 npm install pm2 -g
 
+sudo cp /home/ubuntu/advertisingTvControlClient/nginxGoldTvClient.conf /etc/nginx/sites-enabled/kehilaton_nginx_client.conf
+// OR
 sudo cp /home/ubuntu/advertisingTvControlClient/nginxGoldTvClient.conf /etc/nginx/sites-available/kehilaton_nginx_client.conf
 sudo ln -s /etc/nginx/sites-available/kehilaton_nginx_client.conf /etc/nginx/sites-enabled/kehilaton_nginx_client.conf
 

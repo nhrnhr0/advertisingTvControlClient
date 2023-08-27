@@ -50,12 +50,10 @@ const onOkClick = () => {
       name: opt.label,
     };
   });
-  debugger;
   if (broadcast_in_tvs_id) {
     // send request to update tvs_list
     // ret =
     update_tvs_list(broadcast_in_tvs_id, ret).then((res) => {
-      debugger;
       if (res.status === 200) {
         hide({ selected: ret });
       } else {
